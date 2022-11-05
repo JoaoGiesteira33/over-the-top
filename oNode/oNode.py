@@ -53,11 +53,11 @@ print("Initializing....")
 #ip_sender = input("\nEnter the IP of your system : ")
 #port_sender = int(input("\nEnter the port of your system: "))
 
-name = input("Enter your name: ")
+name = config_file
 
-#print("Waiting for client....")
-#time.sleep(1)
-#print("Connection established....")
+print("Waiting for client....")
+time.sleep(1)
+print("Connection established....")
 
 # Using Multi-threading
 send = threading.Thread(target=sender)
