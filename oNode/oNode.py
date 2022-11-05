@@ -19,7 +19,7 @@ vizinhos = []
 
 def receiver():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(bootstrapper, DEFAULT_PORT)
+    s.bind((bootstrapper, DEFAULT_PORT))
     s.listen(1)
 
     conn, addr = s.accept()
@@ -33,7 +33,7 @@ def receiver():
 def sender():
     #Create socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(bootstrapper,DEFAULT_PORT)
+    s.connect((bootstrapper,DEFAULT_PORT))
     #Send message
     text = "hello"
     while True:
