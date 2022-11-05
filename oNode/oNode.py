@@ -15,12 +15,13 @@ print("Config File:",config_file)
 
 DEFAULT_PORT = 8080
 BUFFER_SIZE = 20
+HOST = "127.0.0.1"
 vizinhos = []
 
 def receiver():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((bootstrapper, DEFAULT_PORT))
-    s.listen(1)
+    s.bind((HOST, DEFAULT_PORT))
+    s.listen()
 
     conn, addr = s.accept()
     print('Connection address:', addr)
