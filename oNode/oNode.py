@@ -5,7 +5,7 @@ import sys
 import socket
 import traceback
 
-if(len(sys.argv) != 3):
+if(len(sys.argv) != 2):
     print('oNode.py <bootstrapper>')
     sys.exit(2)
 
