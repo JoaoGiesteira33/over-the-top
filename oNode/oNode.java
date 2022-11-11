@@ -106,12 +106,13 @@ class Server implements Runnable{
 
 public class oNode{
     public static void main(String[] args){
-        if(args.length != 2){
+        if(args.length != 1){
             System.out.println("oNode.java <bootstrapper>");
             return;
         }
 
-        String bootstrapper = args[1];
+        String bootstrapper = args[0];
+        System.out.println("Bootstrapper: " + bootstrapper);
 
         Server s = new Server();
         Thread serverThread = new Thread(s);
