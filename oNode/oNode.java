@@ -75,6 +75,7 @@ class ClientHandler implements Runnable{
             try{
                 messageReceived = this.dataIn.readUTF();
                 answer = "Received (UPPER): " + messageReceived.toUpperCase();
+                System.out.println("Receiver a message from: " + this.s);
 
                 if(messageReceived.equals("end")){
                     System.out.println("Closing connection (" + this.s + ")");
