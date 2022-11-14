@@ -5,11 +5,20 @@ import java.io.*;
 
 class Server implements Runnable{
     final int PORT = 8080;
+    String config_file = "";
 
+    public Server(String config_file){
+        this.config_file = config_file;
+    }
     public Server(){
     }
+
     @Override
     public void run(){
+        if(!config_file.equals("")){
+            System.out.println("Loading config file...");
+        }
+        
         try{
             ServerSocket s = new ServerSocket(this.PORT);
 
