@@ -1,5 +1,8 @@
 package oNode;
 
+import oNode.Server;
+import oNode.Client;
+
 public class oNode{
     public static void main(String[] args){
         if(args.length < 1 || args.length > 2){

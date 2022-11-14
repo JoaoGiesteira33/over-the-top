@@ -2,6 +2,7 @@ package oNode;
 
 import java.net.*;
 import java.io.*;
+import oNode.ClientHandler;
 
 class Server implements Runnable{
     final int PORT = 8080;
@@ -18,7 +19,7 @@ class Server implements Runnable{
         if(!config_file.equals("")){
             System.out.println("Loading config file...");
         }
-        
+
         try{
             ServerSocket s = new ServerSocket(this.PORT);
 
