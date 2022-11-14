@@ -1,5 +1,7 @@
 package oNode;
 
+import oNode.*;
+
 public class oNode{
     public static void main(String[] args){
         if(args.length < 1 || args.length > 2){
@@ -21,6 +23,9 @@ public class oNode{
             }
             config_file = args[1];
         }
+
+        if(args.length == 1 && bootstrapper.equals("Server"))
+            System.out.println("Erro de argumentos!");
 
         //Start server
         Server s = new Server(config_file);
