@@ -2,9 +2,8 @@ package oNode;
 
 import java.net.*;
 import java.io.*;
-import oNode.ClientHandler;
 
-class Server implements Runnable{
+public class Server implements Runnable{
     final int PORT = 8080;
     String config_file = "";
 

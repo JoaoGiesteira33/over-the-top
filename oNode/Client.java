@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-class Client implements Runnable{ 
+public class Client implements Runnable{ 
     String ipAddress;
     
     public Client(String ipAddress){

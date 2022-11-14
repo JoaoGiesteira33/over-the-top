@@ -3,7 +3,7 @@ package oNode;
 import java.net.*;
 import java.io.*;
 
-class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable{
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
