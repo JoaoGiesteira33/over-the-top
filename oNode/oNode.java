@@ -24,8 +24,10 @@ public class oNode{
             config_file = args[1];
         }
 
-        if(args.length == 1 && bootstrapper.equals("Server"))
+        if(args.length == 1 && bootstrapper.equals("Server")){
             System.out.println("Erro de argumentos!");
+            return;
+        }
 
         //Start server
         Server s = new Server(config_file);
