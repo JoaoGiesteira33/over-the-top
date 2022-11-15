@@ -1,6 +1,9 @@
 package oNode;
 
 import java.net.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.*;
 
 public class Server implements Runnable{
@@ -15,8 +18,14 @@ public class Server implements Runnable{
 
     @Override
     public void run(){
+        Map<String,List<String>> overlay = new HashMap<>();
+
         if(!config_file.equals("")){
             System.out.println("Loading config file...");
+
+            final String finalFileName = "../configFiles/" + this.config_file;
+            File f = new File(finalFileName);
+            overlay = ConfigFileParser.readFile(f);
         }
 
         try{

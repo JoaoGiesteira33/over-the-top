@@ -1,7 +1,5 @@
 package oNode;
 
-import oNode.*;
-
 public class oNode{
     public static void main(String[] args){
         if(args.length < 1 || args.length > 2){
