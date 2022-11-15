@@ -42,7 +42,7 @@ public class Server implements Runnable{
 				DataOutputStream dataOut = new DataOutputStream(clientSocket.getOutputStream());
 
                 //New thread for new connection
-                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut);
+                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut,overlay);
                 Thread t = new Thread(ch);
                 t.start();
             }
