@@ -1,17 +1,22 @@
 package oNode;
 
 import java.net.*;
+import java.util.List;
+import java.util.Map;
 import java.io.*;
 
-class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable{
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
 
-    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout){
+    private Map<String,List<String>> overlay;
+
+    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, Map<String,List<String>> overlay){
         this.s = s;
         this.dataIn = din;
         this.dataOut = dout;
+        this.overlay = overlay;
     }
     @Override
     public void run(){

@@ -1,15 +1,36 @@
 package oNode;
 
 import java.net.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.*;
 
-class Server implements Runnable{
+public class Server implements Runnable{
     final int PORT = 8080;
+    String config_file = "";
 
+    public Server(String config_file){
+        this.config_file = config_file;
+    }
     public Server(){
     }
+
     @Override
     public void run(){
+        Map<String,List<String>> overlay = new HashMap<>();
+
+        if(!config_file.equals("")){
+            System.out.println("Loading config file...");
+
+            final String finalFileName = "../configFiles/" + this.config_file;
+            File f = new File(finalFileName);
+            overlay = ConfigFileParser.readFile(f);
+            for(List<String> ls : overlay.values()){
+                System.out.println(ls);
+            }
+        }
+
         try{
             ServerSocket s = new ServerSocket(this.PORT);
 
