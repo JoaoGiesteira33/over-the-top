@@ -22,9 +22,10 @@ public class ConfigFileParser {
                 
                 //Criar lista de vizinhos
                 List<String> vizinhos = new ArrayList<>();
-                for(String ip: ips)
-                    vizinhos.add(ip);
-
+                for(int i = 1 ; i < ips.length ; i++){
+                    vizinhos.add(ips[i]);
+                }
+                
                 //Adicionar entrada ao Map
                 result.put(ips[0], vizinhos);
             }
