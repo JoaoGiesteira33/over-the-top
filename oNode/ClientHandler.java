@@ -26,17 +26,14 @@ public class ClientHandler implements Runnable{
 
         while(true){
             try{
-                System.out.println("Message Received from: " + s.getInetAddress() + " | OR: " + this.s);
-                System.out.println("Vizinhos: " + overlay.get(""+s.getInetAddress()));
                 messageReceived = this.dataIn.readUTF();
-                answer = "Received (UPPER): " + messageReceived.toUpperCase();
-
                 if(messageReceived.equals("end")){
                     System.out.println("Closing connection (" + this.s + ")");
                     this.s.close();
                     break;
                 }
 
+                answer = this.overlay.get(""+this.s.getInetAddress()).toString();
                 this.dataOut.writeUTF(answer);
             }catch(IOException e){
                 e.printStackTrace();
