@@ -18,6 +18,7 @@ public class ClientHandler implements Runnable{
         this.dataOut = dout;
         this.overlay = overlay;
     }
+
     @Override
     public void run(){
         String messageReceived;
@@ -25,9 +26,10 @@ public class ClientHandler implements Runnable{
 
         while(true){
             try{
+                System.out.println("Message Received from: " + s.getInetAddress() + " | OR: " + this.s);
+                System.out.println("Vizinhos: " + overlay.get(""+s.getInetAddress()));
                 messageReceived = this.dataIn.readUTF();
                 answer = "Received (UPPER): " + messageReceived.toUpperCase();
-                System.out.println("Receiver a message from: " + this.s);
 
                 if(messageReceived.equals("end")){
                     System.out.println("Closing connection (" + this.s + ")");

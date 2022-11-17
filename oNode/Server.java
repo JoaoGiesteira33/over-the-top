@@ -26,9 +26,6 @@ public class Server implements Runnable{
             final String finalFileName = "../configFiles/" + this.config_file;
             File f = new File(finalFileName);
             overlay = ConfigFileParser.readFile(f);
-            for(List<String> ls : overlay.values()){
-                System.out.println(ls);
-            }
         }
 
         try{
