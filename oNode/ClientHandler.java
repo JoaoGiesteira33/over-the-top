@@ -33,6 +33,7 @@ public class ClientHandler implements Runnable{
                     break;
                 }
 
+                System.out.println(this.overlay.get("" + this.s.getInetAddress()));
                 for(String s : this.overlay.get(""+s.getInetAddress())){
                     dataOut.writeUTF(s);
                 }
