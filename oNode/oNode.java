@@ -9,31 +9,21 @@ public class oNode{
         }
 
         String bootstrapper = args[0];
-        System.out.println("Bootstrapper: " + bootstrapper);
 
-        //Server node
-        String config_file = "";
-        if(args.length == 2){
-            if(!bootstrapper.equals("Server"))
-            {
-                System.out.println("Erro de argumentos!");
-                return;
-            }
-            config_file = args[1];
-        }
+        //Server para nodo streamer
+        if(args.length == 2 && bootstrapper.equals("Server")){
+            String config_file = args[1];
+            
+            ServerStreamer ss = new ServerStreamer(config_file);
+            Thread ssThread = new Thread(ss);
+            ssThread.start();
 
-        if(args.length == 1 && bootstrapper.equals("Server")){
-            System.out.println("Erro de argumentos!");
-            return;
-        }
-
-        //Start server
-        Server s = new Server(config_file);
-        Thread serverThread = new Thread(s);
-        serverThread.start();
-
-        //Start talking to bootstrapper
-        if(!bootstrapper.equals("Server")){
+        }else if(args.length == 1){ //Server para nodos restantes
+            Server s = new Server();
+            Thread sThread = new Thread(s);
+            sThread.start();
+            
+            //Cliente para conseguir establece ligação ao bootstrapper
             Client c = new Client(bootstrapper);
             Thread clientThread = new Thread(c);
             clientThread.start();

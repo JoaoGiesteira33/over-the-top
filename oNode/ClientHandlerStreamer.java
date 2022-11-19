@@ -1,35 +1,41 @@
 package oNode;
 
 import java.net.*;
+import java.util.List;
+import java.util.Map;
 import java.io.*;
 
-public class ClientHandler implements Runnable{
+public class ClientHandlerStreamer implements Runnable{
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
 
-    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout){
+    private Map<String,List<String>> overlay;
+
+    public ClientHandlerStreamer(Socket s, DataInputStream din, DataOutputStream dout, Map<String,List<String>> overlay){
         this.s = s;
         this.dataIn = din;
         this.dataOut = dout;
+        this.overlay = overlay;
     }
 
     @Override
     public void run(){
+        String senderIP = this.s.toString();
         String messageReceived;
-        String answer;
 
         while(true){
             try{
                 messageReceived = this.dataIn.readUTF();
                 if(messageReceived.equals("end")){
-                    System.out.println("Closing connection to " + this.s);
+                    System.out.println("Closing connection to " + senderIP);
                     this.s.close();
                     break;
                 }
 
-                answer = messageReceived.toUpperCase();
-                dataOut.writeUTF(answer);
+                List<String> vizinhos = this.overlay.get(senderIP);
+                System.out.println(vizinhos);
+                this.dataOut.writeInt(vizinhos.size());
             }catch(IOException e){
                 e.printStackTrace();
             }
