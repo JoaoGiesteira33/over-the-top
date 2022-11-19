@@ -21,7 +21,7 @@ public class ClientHandlerStreamer implements Runnable{
 
     @Override
     public void run(){
-        String senderIP = this.s.toString();
+        String senderIP = this.s.getInetAddress().toString();
         String messageReceived;
 
         while(true){
