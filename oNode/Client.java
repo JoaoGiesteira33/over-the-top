@@ -22,7 +22,11 @@ public class Client implements Runnable{
             //Pedido de Vizinhos
             dataOut.writeUTF("OVERLAY_JOIN_REQUEST");
             int numeroVizinhos = dataIn.readInt();
-            System.out.println("TENHO " + numeroVizinhos + " VIZINHOS!");
+            //Receber lista de vizinhos
+            for(int i = 0 ; i < numeroVizinhos ; i++){
+                String ipVizinho = dataIn.readUTF();
+                System.out.println("v" + (i+1) +") " + ipVizinho);
+            }
 
             while(true){
                 String message = scanner.nextLine();

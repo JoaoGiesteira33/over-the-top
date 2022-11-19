@@ -35,8 +35,13 @@ public class ClientHandlerStreamer implements Runnable{
                 }else if(messageReceived.equals("OVERLAY_JOIN_REQUEST")){
                     System.out.println("Asking to join overlay: " + senderIP);
                     List<String> vizinhos = this.overlay.get(senderIP);
-                    System.out.println(vizinhos);
+                    //Enviar número de vizinhos
                     this.dataOut.writeInt(vizinhos.size());
+
+                    //Enviar ip de cada vizinho
+                    for(String ip : vizinhos){
+                        this.dataOut.writeUTF(ip);
+                    }
                 }else{
                     System.out.println("Unkown Message! Shutting Down!");
                     this.dataOut.writeUTF("Unkown Message! Shutting Down!");
