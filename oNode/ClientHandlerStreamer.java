@@ -33,6 +33,7 @@ public class ClientHandlerStreamer implements Runnable{
                     this.s.close();
                     break;
                 }else if(messageReceived.equals("OVERLAY_JOIN_REQUEST")){
+                    System.out.println("Asking to join overlay: " + senderIP);
                     List<String> vizinhos = this.overlay.get(senderIP);
                     System.out.println(vizinhos);
                     this.dataOut.writeInt(vizinhos.size());
@@ -42,7 +43,6 @@ public class ClientHandlerStreamer implements Runnable{
                     this.s.close();
                     break;
                 }
-
             }catch(IOException e){
                 e.printStackTrace();
             }
