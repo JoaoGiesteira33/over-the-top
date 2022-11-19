@@ -19,6 +19,11 @@ public class Client implements Runnable{
             DataInputStream dataIn = new DataInputStream(s.getInputStream());
             DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
 
+            //Pedido de Vizinhos
+            dataOut.writeUTF("OVERLAY_JOIN_REQUEST");
+            int numeroVizinhos = dataIn.readInt();
+            System.out.println("TENHO " + numeroVizinhos + " VIZINHOS!");
+
             while(true){
                 String message = scanner.nextLine();
                 dataOut.writeUTF(message);

@@ -27,15 +27,22 @@ public class ClientHandlerStreamer implements Runnable{
         while(true){
             try{
                 messageReceived = this.dataIn.readUTF();
+
                 if(messageReceived.equals("end")){
                     System.out.println("Closing connection to " + senderIP);
                     this.s.close();
                     break;
+                }else if(messageReceived.equals("OVERLAY_JOIN_REQUEST")){
+                    List<String> vizinhos = this.overlay.get(senderIP);
+                    System.out.println(vizinhos);
+                    this.dataOut.writeInt(vizinhos.size());
+                }else{
+                    System.out.println("Unkown Message! Shutting Down!");
+                    this.dataOut.writeUTF("Unkown Message! Shutting Down!");
+                    this.s.close();
+                    break;
                 }
 
-                List<String> vizinhos = this.overlay.get(senderIP);
-                System.out.println(vizinhos);
-                this.dataOut.writeInt(vizinhos.size());
             }catch(IOException e){
                 e.printStackTrace();
             }
