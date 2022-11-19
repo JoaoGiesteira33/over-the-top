@@ -48,7 +48,7 @@ public class Cliente {
     //Frame
     f.addWindowListener(new WindowAdapter() {
        public void windowClosing(WindowEvent e) {
-	 System.exit(0);
+	        System.exit(0);
        }
     });
 
@@ -86,8 +86,8 @@ public class Cliente {
 
     try {
     // socket e video
-	RTPsocket = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-    RTPsocket.setSoTimeout(5000); // setimeout to 5s
+	      RTPsocket = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
+        RTPsocket.setSoTimeout(5000); // setimeout to 5s
     } catch (SocketException e) {
         System.out.println("Cliente: erro no socket: " + e.getMessage());
     }
@@ -114,6 +114,17 @@ public class Cliente {
     System.out.println("Play Button pressed !"); 
 	      //start the timers ... 
 	      cTimer.start();
+	    }
+  }
+  //---------------------------------
+  //Handler for Pause button
+  //--------------------------------
+  class pauseButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e){
+
+    System.out.println("Pause Button pressed !"); 
+	      //start the timers ... 
+	      cTimer.stop();;
 	    }
   }
 

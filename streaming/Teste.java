@@ -68,7 +68,7 @@ public class Teste {
     //Frame
     f.addWindowListener(new WindowAdapter() {
        public void windowClosing(WindowEvent e) {
-	 System.exit(0);
+	        System.exit(0);
        }
     });
 
@@ -79,6 +79,7 @@ public class Teste {
     buttonPanel.add(pauseButton);
     buttonPanel.add(tearButton);
     playButton.addActionListener(new playButtonListener());
+    pauseButton.addActionListener(new pauseButtonListener());
 
     //Image display label
     iconLabel.setIcon(null);
@@ -96,7 +97,7 @@ public class Teste {
 
     //init para a parte do cliente
     //--------------------------
-    cTimer = new Timer(20, new clientTimerListener());
+    cTimer = new Timer(10, new clientTimerListener());
     cTimer.setInitialDelay(0);
     cTimer.setCoalesce(true);
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
@@ -109,13 +110,13 @@ public class Teste {
 
     try {
     // socket e video
-	RTPsocket = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-    RTPsocket.setSoTimeout(5000); // setimeout to 5s
+	    RTPsocket = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
+      RTPsocket.setSoTimeout(5000); // setimeout to 5s
     //Get Client IP address 
-    ClientIPAddr = InetAddress.getByName("127.0.0.1");
-    System.out.println("Teste: vai enviar e receber video no mesmo socket " + ClientIPAddr);
-	video = new VideoStream(VideoFileName); //init the VideoStream object:
-    System.out.println("Teste: vai enviar e receber video da file " + VideoFileName);
+      ClientIPAddr = InetAddress.getByName("127.0.0.1");
+      System.out.println("Teste: vai enviar e receber video no mesmo socket " + ClientIPAddr);
+	    video = new VideoStream(VideoFileName); //init the VideoStream object:
+      System.out.println("Teste: vai enviar e receber video da file " + VideoFileName);
 
     } catch (SocketException e) {
         System.out.println("Teste: erro no socket: " + e.getMessage());
@@ -163,6 +164,19 @@ public class Teste {
 	      sTimer.start();
 	    }
   }
+   //---------------------------------
+  //Handler for Pause button
+  //--------------------------------
+  class pauseButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e){
+
+    System.out.println("Pause Button pressed !"); 
+	      //start the timers ... 
+	      cTimer.stop();
+        sTimer.stop();
+	    }
+  }
+
 
   //------------------------------------
   //Handler for timer (para cliente)
@@ -175,36 +189,36 @@ public class Teste {
       rcvdp = new DatagramPacket(cBuf, cBuf.length);
 
       try{
-	//receive the DP from the socket:
-	RTPsocket.receive(rcvdp);
-	  
-	//create an RTPpacket object from the DP
-	RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
+	        //receive the DP from the socket:
+	        RTPsocket.receive(rcvdp);
 
-	//print important header fields of the RTP packet received: 
-	System.out.println("Got RTP packet with SeqNum # "+rtp_packet.getsequencenumber()+" TimeStamp "+rtp_packet.gettimestamp()+" ms, of type "+rtp_packet.getpayloadtype());
-	
-	//print header bitstream:
-	rtp_packet.printheader();
+	        //create an RTPpacket object from the DP
+	        RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
 
-	//get the payload bitstream from the RTPpacket object
-	int payload_length = rtp_packet.getpayload_length();
-	byte [] payload = new byte[payload_length];
-	rtp_packet.getpayload(payload);
+	        //print important header fields of the RTP packet received: 
+	        System.out.println("Got RTP packet with SeqNum # "+rtp_packet.getsequencenumber()+" TimeStamp "+rtp_packet.gettimestamp()+" ms, of type "+rtp_packet.getpayloadtype());
 
-	//get an Image object from the payload bitstream
-	Toolkit toolkit = Toolkit.getDefaultToolkit();
-	Image image = toolkit.createImage(payload, 0, payload_length);
-	
-	//display the image as an ImageIcon object
-	icon = new ImageIcon(image);
-	iconLabel.setIcon(icon);
+	        //print header bitstream:
+	        rtp_packet.printheader();
+
+	        //get the payload bitstream from the RTPpacket object
+	        int payload_length = rtp_packet.getpayload_length();
+	        byte [] payload = new byte[payload_length];
+	        rtp_packet.getpayload(payload);
+
+	        //get an Image object from the payload bitstream
+	        Toolkit toolkit = Toolkit.getDefaultToolkit();
+	        Image image = toolkit.createImage(payload, 0, payload_length);
+
+	        //display the image as an ImageIcon object
+	        icon = new ImageIcon(image);
+	        iconLabel.setIcon(icon);
       }
       catch (InterruptedIOException iioe){
-	System.out.println("Nothing to read");
+	        System.out.println("Nothing to read");
       }
       catch (IOException ioe) {
-	System.out.println("Exception caught: "+ioe);
+        	System.out.println("Exception caught: "+ioe);
       }
     }
   }
@@ -212,51 +226,48 @@ public class Teste {
   //------------------------
   //Handler for timer
   //------------------------
-  class serverTimerListener implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
+  class serverTimerListener implements ActionListener{
+    public void actionPerformed(ActionEvent e){
 
     //if the current image nb is less than the length of the video
-    if (imagenb < VIDEO_LENGTH)
-      {
-	//update current imagenb
-	imagenb++;
-       
-	try {
-	  //get next frame to send from the video, as well as its size
-	  int image_length = video.getnextframe(sBuf);
+        if (imagenb < VIDEO_LENGTH){
+	      //update current imagenb
+	        imagenb++;
 
-	  //Builds an RTPpacket object containing the frame
-	  RTPpacket rtp_packet = new RTPpacket(MJPEG_TYPE, imagenb, imagenb*FRAME_PERIOD, sBuf, image_length);
-	  
-	  //get to total length of the full rtp packet to send
-	  int packet_length = rtp_packet.getlength();
+    	    try {
 
-	  //retrieve the packet bitstream and store it in an array of bytes
-	  byte[] packet_bits = new byte[packet_length];
-	  rtp_packet.getpacket(packet_bits);
+    	        //get next frame to send from the video, as well as its size
+    	        int image_length = video.getnextframe(sBuf);
 
-	  //send the packet as a DatagramPacket over the UDP socket 
-	  senddp = new DatagramPacket(packet_bits, packet_length, ClientIPAddr, RTP_dest_port);
-	  RTPsocket.send(senddp);
+    	        //Builds an RTPpacket object containing the frame
+    	        RTPpacket rtp_packet = new RTPpacket(MJPEG_TYPE, imagenb, imagenb*FRAME_PERIOD, sBuf, image_length);
 
-	  System.out.println("Send frame #"+imagenb);
-	  //print the header bitstream
-	  rtp_packet.printheader();
+    	        //get to total length of the full rtp packet to send
+    	        int packet_length = rtp_packet.getlength();
 
-	  //update GUI
-	  // label.setText("Send frame #" + imagenb);
-	}
-	catch(Exception ex)
-	  {
-	    System.out.println("Exception caught: "+ex);
-	    System.exit(0);
-	  }
-      }
-    else
-      {
-	//if we have reached the end of the video file, stop the timer
-	sTimer.stop();
-      }
+    	        //retrieve the packet bitstream and store it in an array of bytes
+    	        byte[] packet_bits = new byte[packet_length];
+    	        rtp_packet.getpacket(packet_bits);
+
+    	        //send the packet as a DatagramPacket over the UDP socket 
+    	        senddp = new DatagramPacket(packet_bits, packet_length, ClientIPAddr, RTP_dest_port);
+    	        RTPsocket.send(senddp);
+
+    	        System.out.println("Send frame #"+imagenb);
+    	        //print the header bitstream
+    	        rtp_packet.printheader();
+
+    	        //update GUI
+    	         //label.setText("Send frame #" + imagenb);
+
+	        }catch(Exception ex){
+	          System.out.println("Exception caught: "+ex);
+	          System.exit(0);
+	        }
+        }else{
+	      //if we have reached the end of the video file, stop the timer
+	        sTimer.stop();
+        }
     }
   }
 

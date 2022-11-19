@@ -13,7 +13,11 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-
+/*
+Perguntas:
+  1: RTP funciona sobre UDP normalmamente, mas podemos usar com TCP ? Temos que fazer alterações ?
+  2: A ideia aqui seria chamar o servidor do oNode ? 
+*/
 public class Servidor extends JFrame implements ActionListener {
 
   //GUI:
@@ -53,12 +57,15 @@ public class Servidor extends JFrame implements ActionListener {
     sTimer.setCoalesce(true);
     sBuf = new byte[15000]; //allocate memory for the sending buffer
 
+    /*
+     * if()
+     */
     try {
-	RTPsocket = new DatagramSocket(); //init RTP socket 
-    ClientIPAddr = InetAddress.getByName("127.0.0.1");
-    System.out.println("Servidor: socket " + ClientIPAddr);
-	video = new VideoStream(VideoFileName); //init the VideoStream object:
-    System.out.println("Servidor: vai enviar video da file " + VideoFileName);
+	      RTPsocket = new DatagramSocket(); //init RTP socket 
+        ClientIPAddr = InetAddress.getByName("127.0.0.1");
+        System.out.println("Servidor: socket " + ClientIPAddr);
+	      video = new VideoStream(VideoFileName); //init the VideoStream object:
+        System.out.println("Servidor: vai enviar video da file " + VideoFileName);
 
     } catch (SocketException e) {
         System.out.println("Servidor: erro no socket: " + e.getMessage());
@@ -69,13 +76,15 @@ public class Servidor extends JFrame implements ActionListener {
     //Handler to close the main window
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
-	//stop the timer and exit
-	sTimer.stop();
-	System.exit(0);
-      }});
+	    //stop the timer and exit
+	      sTimer.stop();
+	      System.exit(0);
+      }
+    });
 
     //GUI:
-    label = new JLabel("Send frame #        ", JLabel.CENTER);
+    String descricao = "Send frame #" + imagenb;
+    label = new JLabel(descricao, JLabel.CENTER);
     getContentPane().add(label, BorderLayout.CENTER);
           
     sTimer.start();
@@ -115,8 +124,10 @@ public class Servidor extends JFrame implements ActionListener {
     if (imagenb < VIDEO_LENGTH)
       {
 	//update current imagenb
-	imagenb++;
-       
+	      imagenb++;
+        String descricao = "Send frame #" + imagenb;
+        label.setText(descricao);
+        
 	try {
 	  //get next frame to send from the video, as well as its size
 	  int image_length = video.getnextframe(sBuf);
@@ -150,8 +161,8 @@ public class Servidor extends JFrame implements ActionListener {
       }
     else
       {
-	//if we have reached the end of the video file, stop the timer
-	sTimer.stop();
+	        //if we have reached the end of the video file, stop the timer
+	        sTimer.stop();
       }
   }
 
