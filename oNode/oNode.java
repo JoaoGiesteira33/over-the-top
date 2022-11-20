@@ -13,7 +13,7 @@ public class oNode{
         //Server para nodo streamer
         if(args.length == 2 && bootstrapper.equals("Server")){
             String config_file = args[1];
-            
+
             ServerStreamer ss = new ServerStreamer(config_file);
             Thread ssThread = new Thread(ss);
             ssThread.start();
@@ -24,7 +24,7 @@ public class oNode{
             sThread.start();
             
             //Cliente para conseguir establece ligação ao bootstrapper
-            Client c = new Client(bootstrapper);
+            EntradaOverlay c = new EntradaOverlay(bootstrapper);
             Thread clientThread = new Thread(c);
             clientThread.start();
         }

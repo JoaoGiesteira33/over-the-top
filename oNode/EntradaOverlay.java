@@ -4,15 +4,16 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class Client implements Runnable{ 
+public class EntradaOverlay implements Runnable{ 
     String ipAddress;
     
-    public Client(String ipAddress){
+    public EntradaOverlay(String ipAddress){
         this.ipAddress = ipAddress;
     }
     @Override
     public void run(){
         Scanner scanner = new Scanner(System.in);
+        List<String> vizinhos = new ArrayList<>();
 
         try{
             Socket s = new Socket(this.ipAddress, 8080);           
@@ -25,15 +26,8 @@ public class Client implements Runnable{
             //Receber lista de vizinhos
             for(int i = 0 ; i < numeroVizinhos ; i++){
                 String ipVizinho = dataIn.readUTF();
+                vizinhos.add(ipVizinho);
                 System.out.println("v" + (i+1) +") " + ipVizinho);
-            }
-
-            while(true){
-                String message = scanner.nextLine();
-                dataOut.writeUTF(message);
-
-                String answer = dataIn.readUTF();
-                System.out.println(answer);
             }
         }catch(IOException e){
             e.printStackTrace();
