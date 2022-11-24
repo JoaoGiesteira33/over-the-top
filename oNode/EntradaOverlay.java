@@ -14,9 +14,9 @@ public class EntradaOverlay implements Runnable{
     public void run(){
         Scanner scanner = new Scanner(System.in);
         List<String> vizinhos = new ArrayList<>();
-
+        Socket s=null;
         try{
-            Socket s = new Socket(this.ipAddress, 8080);           
+            s = new Socket(this.ipAddress, 8080);           
             DataInputStream dataIn = new DataInputStream(s.getInputStream());
             DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
 
@@ -32,7 +32,11 @@ public class EntradaOverlay implements Runnable{
         }catch(IOException e){
             e.printStackTrace();
         }
-
         scanner.close();
+        try{
+            s.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
