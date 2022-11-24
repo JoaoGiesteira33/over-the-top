@@ -9,6 +9,7 @@ import java.io.*;
 public class ServerStreamer implements Runnable{
     final int PORT = 8080;
     String config_file;
+    RoutingTable routingTable;
 
     public ServerStreamer(String config_file){
         this.config_file = config_file;
@@ -23,8 +24,9 @@ public class ServerStreamer implements Runnable{
         File f = new File(finalFileName);
         overlay = ConfigFileParser.readFile(f);
         
+        ServerSocket s = null;
         try{
-            ServerSocket s = new ServerSocket(this.PORT);
+            s = new ServerSocket(this.PORT);
 
             while(true){
                 Socket clientSocket = s.accept();
@@ -38,6 +40,11 @@ public class ServerStreamer implements Runnable{
                 Thread t = new Thread(ch);
                 t.start();
             }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        try{
+            s.close();
         }catch(IOException e){
             e.printStackTrace();
         }
