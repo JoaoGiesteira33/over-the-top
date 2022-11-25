@@ -1,17 +1,18 @@
 package oNode;
 
-import java.net.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class ServerStreamer implements Runnable{
+public class ServerBootstrapper implements Runnable{
     final int PORT = 8080;
     String config_file;
-    RoutingTable routingTable;
+    Delay delayList;
 
-    public ServerStreamer(String config_file){
+    public ServerBootstrapper(String config_file){
         this.config_file = config_file;
     }
 

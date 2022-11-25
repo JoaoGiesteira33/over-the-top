@@ -8,7 +8,7 @@ public class oNode{
         if(args.length == 2 && args[0].equals("Server")){
             String config_file = args[1];
 
-            ServerStreamer ss = new ServerStreamer(config_file);
+            ServerBootstrapper ss = new ServerBootstrapper(config_file);
             Thread ssThread = new Thread(ss);
             ssThread.start();
 
