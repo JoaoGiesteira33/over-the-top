@@ -173,7 +173,6 @@ public class Teste {
     System.out.println("Pause Button pressed !"); 
 	      //start the timers ... 
 	      cTimer.stop();
-        sTimer.stop();
 	    }
   }
 

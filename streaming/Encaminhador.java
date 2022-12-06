@@ -91,6 +91,7 @@ public class Encaminhador extends JFrame implements ActionListener {
 	              //receive the DP from the socket:
 	              RTPsocket_in.receive(rcvdp);
 	              //create an RTPpacket object from the DP
+                /* 
 	              RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
         
 	              //print important header fields of the RTP packet received: 
@@ -105,7 +106,7 @@ public class Encaminhador extends JFrame implements ActionListener {
                   byte[] packet_bits = new byte[packet_length];
                   rtp_packet.getpacket(packet_bits);
                   //send the packet as a DatagramPacket over the UDP socket 
-
+                  */
                   RTPsocket_out = new DatagramSocket(RTP_dest_port ,ClientIPAddr);
                   RTPsocket_out.send(rcvdp);
                   System.out.println("Send frame #"+imagenb);
