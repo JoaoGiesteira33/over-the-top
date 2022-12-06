@@ -65,11 +65,11 @@ public class Encaminhador extends JFrame implements ActionListener {
   }
 
   //------------------------------------
-  //main
+  //main: args: 0=ipNext
   //------------------------------------
   public static void main(String argv[]) throws Exception
-  {
-        InetAddress ia = InetAddress.getByName("127.0.0.1");
+  { 
+        InetAddress ia = InetAddress.getByName(argv[0]);
         Encaminhador e = new Encaminhador(ia);
   }
 
