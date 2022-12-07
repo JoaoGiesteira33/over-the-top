@@ -36,10 +36,8 @@ public class StreamerMonitorizacaoRede implements Runnable{
                             System.out.println("Vizinho ainda não conectado (" + v + ")");
                         }
                         s.close();
-                    }catch(UnknownHostException e){
-                        System.out.println("Vizinho ainda não conectado (" + v + ")");
                     }catch(Exception e){
-                        e.printStackTrace();
+                        System.out.println("Vizinho ainda não conectado (" + v + ")");
                     }
                 }    
 
