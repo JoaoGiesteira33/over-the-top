@@ -29,7 +29,11 @@ public class StreamerMonitorizacaoRede implements Runnable{
                         dataOut.writeInt(0);
                         dataOut.writeLong(new Date().getTime());
 
-                        System.out.println(s.getInetAddress() + " | " + dataIn.readUTF());
+                        try{
+                            System.out.println(s.getInetAddress() + " | " + dataIn.readUTF());
+                        }catch(Exception e){
+                            System.out.println("Vizinho ainda não conectado");
+                        }
                         s.close();
                     }catch(Exception e){
                         e.printStackTrace();
@@ -40,7 +44,7 @@ public class StreamerMonitorizacaoRede implements Runnable{
                 Thread.sleep(intervaloMensagemMS);
             }
         } catch (InterruptedException ex) {
-            //SomeFishCatching
+            ex.printStackTrace();
         }
     }
 }
