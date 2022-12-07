@@ -1,6 +1,7 @@
 package oNode;
 
 import java.net.*;
+import java.util.Date;
 import java.io.*;
 
 public class ClientHandler implements Runnable{
@@ -17,18 +18,31 @@ public class ClientHandler implements Runnable{
     @Override
     public void run(){
         String messageReceived;
-        String answer;
+        String answer = "";
 
         while(true){
             try{
                 messageReceived = this.dataIn.readUTF();
+
                 if(messageReceived.equals("end")){
                     System.out.println("Closing connection to " + this.s);
                     this.s.close();
                     break;
+                }else if(messageReceived.equals("MONITORIZACAO")){
+                    //Handle mensagem de monitorizacao
+                    String ipServidor = dataIn.readUTF();
+                    int distanciaServidor = dataIn.readInt();
+
+                    long currentTime = new Date().getTime();
+                    long tempoSaida = dataIn.readLong();
+
+                    answer = ("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay: " + (currentTime - tempoSaida) + "ms");
+                }else{
+                    System.out.println("Mensagem desconhecida. Terminando conexão.");
+                    this.s.close();
+                    break;
                 }
 
-                answer = messageReceived.toUpperCase();
                 dataOut.writeUTF(answer);
             }catch(IOException e){
                 e.printStackTrace();
@@ -38,6 +52,7 @@ public class ClientHandler implements Runnable{
         try{
             this.dataIn.close();
             this.dataOut.close();
+            this.s.close();
         }catch(IOException e){
             e.printStackTrace();
         }
