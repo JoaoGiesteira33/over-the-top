@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.io.*;
 
-public class ClientHandlerStreamer implements Runnable{
+public class BootstrapperClientHandler implements Runnable{
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
@@ -13,12 +13,12 @@ public class ClientHandlerStreamer implements Runnable{
     private Map<String,List<String>> overlay;
     private List<String> connected_nodes;
 
-    public ClientHandlerStreamer(Socket s, 
-    DataInputStream din, 
-    DataOutputStream dout,
-    Map<String,List<String>> overlay,
-    List<String> connected_nodes)
-    {
+    public BootstrapperClientHandler(
+        Socket s, 
+            DataInputStream din, 
+                DataOutputStream dout,
+                    Map<String,List<String>> overlay,
+                        List<String> connected_nodes){
         this.s = s;
         this.dataIn = din;
         this.dataOut = dout;
@@ -46,6 +46,7 @@ public class ClientHandlerStreamer implements Runnable{
                 }else if(messageReceived.equals("OVERLAY_JOIN_REQUEST")){
                     System.out.println("Asking to join overlay: " + senderIP);
                     List<String> vizinhos = this.overlay.get(senderIP);
+
                     //Enviar número de vizinhos
                     this.dataOut.writeInt(vizinhos.size());
 
@@ -56,7 +57,6 @@ public class ClientHandlerStreamer implements Runnable{
 
                     //Adicionar Nodo à lista de nodos conectados
                     this.connected_nodes.add(senderIP);
-
                 }else{
                     System.out.println("Unkown Message! Shutting Down!");
                     this.dataOut.writeUTF("Unkown Message! Shutting Down!");

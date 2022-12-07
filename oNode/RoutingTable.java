@@ -26,6 +26,4 @@ public class RoutingTable {
     public void updateEntry(String key, String value){
         this.routingTable.replace(key, value);
     }
-
-
 }

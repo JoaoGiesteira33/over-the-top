@@ -8,13 +8,17 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerBootstrapper implements Runnable{
+/*
+ * Servidor principal a correr no nodo
+ * reponsável por fazer o papel de bootstrapper.
+ */
+public class BootstrapperServer implements Runnable{
     final int PORT = 8080;
     String config_file;
     List<String> connected_nodes;
     Delay delayList;
 
-    public ServerBootstrapper(String config_file){
+    public BootstrapperServer(String config_file){
         this.config_file = config_file;
         this.connected_nodes = new ArrayList<>();
     }
@@ -31,9 +35,11 @@ public class ServerBootstrapper implements Runnable{
         System.out.println("File loaded sucesfully!");
         
         //Inicializar serviço de difusão
-        StreamerDifusao sd = new StreamerDifusao();
-        Thread threadSD = new Thread(sd);
-        threadSD.start(overlay,connected_nodes);
+        /*
+         StreamerDifusao sd = new StreamerDifusao();
+         Thread threadSD = new Thread(sd);
+         threadSD.start(overlay,connected_nodes);
+         */
 
         //Escutar todos os pedidos
         ServerSocket s = null;
@@ -48,7 +54,7 @@ public class ServerBootstrapper implements Runnable{
 				DataOutputStream dataOut = new DataOutputStream(clientSocket.getOutputStream());
 
                 //New thread for new connection
-                ClientHandlerStreamer ch = new ClientHandlerStreamer(clientSocket,dataIn,dataOut,overlay,connected_nodes);
+                BootstrapperClientHandler ch = new BootstrapperClientHandler(clientSocket,dataIn,dataOut,overlay,connected_nodes);
                 Thread t = new Thread(ch);
                 t.start();
             }

@@ -2,15 +2,12 @@ package oNode;
 
 public class oNode{
     public static void main(String[] args){
-        //String bootstrapper = args[0];
-
-        //Server para nodo streamer
-        if(args.length == 2 && args[0].equals("Server")){
+        if(args.length == 2 && args[0].equals("-b")){ //Server para nodo bootstrapper
             String config_file = args[1];
 
-            ServerBootstrapper ss = new ServerBootstrapper(config_file);
-            Thread ssThread = new Thread(ss);
-            ssThread.start();
+            BootstrapperServer sb = new BootstrapperServer(config_file);
+            Thread sbThread = new Thread(sb);
+            sbThread.start();
 
         }else if(args.length == 1){ //Server para nodos restantes
             Server s = new Server();
@@ -24,10 +21,9 @@ public class oNode{
             Thread clientThread = new Thread(c);
             clientThread.start();
         }
-
         else{
-            System.out.println("Normal Node: oNode.java <bootstrapper>");
-            System.out.println("Server Node: oNode.java \"Server\" <config_file>");
+            System.out.println("Normal Node: oNode.java <bootstrapper_ip>");
+            System.out.println("Bootstrapper Node: oNode.java -b <config_file>");
             return;
         }
     }

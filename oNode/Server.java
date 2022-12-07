@@ -5,7 +5,8 @@ import java.io.*;
 
 public class Server implements Runnable{
     final int PORT = 8080;
-    List<InformacaoServer> 
+    //List<InformacaoServer> 
+    
     public Server(){
     }
 

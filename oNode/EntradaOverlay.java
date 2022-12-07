@@ -4,12 +4,17 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+/*
+ * Cliente principal a correr em qualquer nodo
+ * que se quer conectar à rede overlay.
+ */
 public class EntradaOverlay implements Runnable{ 
-    String ipAddress;
+    String ipAddress; //Bootstrapper IP
     
     public EntradaOverlay(String ipAddress){
         this.ipAddress = ipAddress;
     }
+
     @Override
     public void run(){
         Scanner scanner = new Scanner(System.in);
@@ -23,6 +28,7 @@ public class EntradaOverlay implements Runnable{
             //Pedido de Vizinhos
             dataOut.writeUTF("OVERLAY_JOIN_REQUEST");
             int numeroVizinhos = dataIn.readInt();
+            
             //Receber lista de vizinhos
             for(int i = 0 ; i < numeroVizinhos ; i++){
                 String ipVizinho = dataIn.readUTF();

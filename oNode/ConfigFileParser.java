@@ -8,6 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+/*
+ * Classe auxiliar que faz parse
+ * de ficheiros na pasta configFiles,
+ * ficheiros esses que têm informação sobre
+ * os vizinhos de cada nodo.
+ */
 public class ConfigFileParser {
     public static Map<String,List<String>> readFile(File f){
         Map<String,List<String>> result = new HashMap<>();
