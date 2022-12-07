@@ -37,6 +37,10 @@ public class ClientHandler implements Runnable{
                     long tempoSaida = dataIn.readLong();
 
                     answer = ("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay: " + (currentTime - tempoSaida) + "ms");
+                }else{
+                    System.out.println("Mensagem desconhecida. Terminando conexão.");
+                    this.s.close();
+                    break;
                 }
 
                 dataOut.writeUTF(answer);
@@ -48,6 +52,7 @@ public class ClientHandler implements Runnable{
         try{
             this.dataIn.close();
             this.dataOut.close();
+            this.s.close();
         }catch(IOException e){
             e.printStackTrace();
         }

@@ -55,7 +55,7 @@ public class oNode{
             Thread sThread = new Thread(s);
             sThread.start();
 
-            String bootstrapper = args[0];
+            String bootstrapper = args[1];
             
             EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos);
             Thread clienThread = new Thread(c);
@@ -63,7 +63,7 @@ public class oNode{
 
             //...
         }else if(args.length == 2 && args[0].equals("-s")){ //Server para nodo servidor (streamer de vídeo)
-            String bootstrapper = args[0];
+            String bootstrapper = args[1];
 
             //Server default para conseguir receber qualquer mensagem necessária
             Server s = new Server();
