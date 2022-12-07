@@ -36,6 +36,8 @@ public class EntradaOverlay implements Runnable{
                 this.vizinhos.add(ipVizinho);
                 System.out.println("v" + (i+1) +") " + ipVizinho);
             }
+
+            dataOut.writeUTF("end");
         }catch(IOException e){
             e.printStackTrace();
         }
