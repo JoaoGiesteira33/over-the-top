@@ -1,7 +1,6 @@
 package oNode;
 
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 import java.io.*;
@@ -32,6 +31,7 @@ public class StreamerMonitorizacaoRede implements Runnable{
 
                         try{
                             System.out.println(s.getInetAddress() + " | " + dataIn.readUTF());
+                            dataOut.writeUTF("end");
                         }catch(Exception e){
                             System.out.println("Vizinho ainda não conectado (" + v + ")");
                         }
