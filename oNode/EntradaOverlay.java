@@ -10,15 +10,16 @@ import java.util.*;
  */
 public class EntradaOverlay implements Runnable{ 
     String ipAddress; //Bootstrapper IP
+    List<String> vizinhos;
     
-    public EntradaOverlay(String ipAddress){
+    public EntradaOverlay(String ipAddress, List<String> vizinhos){
         this.ipAddress = ipAddress;
+        this.vizinhos = vizinhos;
     }
 
     @Override
     public void run(){
         Scanner scanner = new Scanner(System.in);
-        List<String> vizinhos = new ArrayList<>();
         Socket s=null;
         try{
             s = new Socket(this.ipAddress, 8080);
@@ -34,13 +35,13 @@ public class EntradaOverlay implements Runnable{
             //Receber lista de vizinhos
             for(int i = 0 ; i < numeroVizinhos ; i++){
                 String ipVizinho = dataIn.readUTF();
-                vizinhos.add(ipVizinho);
+                this.vizinhos.add(ipVizinho);
                 System.out.println("v" + (i+1) +") " + ipVizinho);
             }
         }catch(IOException e){
             e.printStackTrace();
         }
-        
+
         //Terminar conexão com bootstrapper
         scanner.close();
         try{
