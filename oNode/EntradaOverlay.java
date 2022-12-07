@@ -21,14 +21,16 @@ public class EntradaOverlay implements Runnable{
         List<String> vizinhos = new ArrayList<>();
         Socket s=null;
         try{
-            s = new Socket(this.ipAddress, 8080);           
+            s = new Socket(this.ipAddress, 8080);
             DataInputStream dataIn = new DataInputStream(s.getInputStream());
             DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
 
             //Pedido de Vizinhos
             dataOut.writeUTF("OVERLAY_JOIN_REQUEST");
+            dataOut.flush();
+
+            //Receber número de vizinhos
             int numeroVizinhos = dataIn.readInt();
-            
             //Receber lista de vizinhos
             for(int i = 0 ; i < numeroVizinhos ; i++){
                 String ipVizinho = dataIn.readUTF();
@@ -38,6 +40,8 @@ public class EntradaOverlay implements Runnable{
         }catch(IOException e){
             e.printStackTrace();
         }
+        
+        //Terminar conexão com bootstrapper
         scanner.close();
         try{
             s.close();
