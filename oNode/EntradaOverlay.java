@@ -19,7 +19,6 @@ public class EntradaOverlay implements Runnable{
 
     @Override
     public void run(){
-        Scanner scanner = new Scanner(System.in);
         Socket s=null;
         try{
             s = new Socket(this.ipAddress, 8080);
@@ -28,7 +27,6 @@ public class EntradaOverlay implements Runnable{
 
             //Pedido de Vizinhos
             dataOut.writeUTF("OVERLAY_JOIN_REQUEST");
-            dataOut.flush();
 
             //Receber número de vizinhos
             int numeroVizinhos = dataIn.readInt();
@@ -43,7 +41,6 @@ public class EntradaOverlay implements Runnable{
         }
 
         //Terminar conexão com bootstrapper
-        scanner.close();
         try{
             s.close();
         }catch(IOException e){
