@@ -3,8 +3,6 @@ package streaming;
 
 import java.io.*;
 import java.net.*;
-import java.awt.*;
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
@@ -67,11 +65,11 @@ public class Encaminhador extends JFrame implements ActionListener {
   }
 
   //------------------------------------
-  //main
+  //main: args: 0=ipNext
   //------------------------------------
   public static void main(String argv[]) throws Exception
-  {
-        InetAddress ia = InetAddress.getByName("127.0.0.1");
+  { 
+        InetAddress ia = InetAddress.getByName(argv[0]);
         Encaminhador e = new Encaminhador(ia);
   }
 
@@ -91,6 +89,7 @@ public class Encaminhador extends JFrame implements ActionListener {
 	              //receive the DP from the socket:
 	              RTPsocket_in.receive(rcvdp);
 	              //create an RTPpacket object from the DP
+                /* 
 	              RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
         
 	              //print important header fields of the RTP packet received: 
@@ -105,7 +104,7 @@ public class Encaminhador extends JFrame implements ActionListener {
                   byte[] packet_bits = new byte[packet_length];
                   rtp_packet.getpacket(packet_bits);
                   //send the packet as a DatagramPacket over the UDP socket 
-
+                  */
                   RTPsocket_out = new DatagramSocket(RTP_dest_port ,ClientIPAddr);
                   RTPsocket_out.send(rcvdp);
                   System.out.println("Send frame #"+imagenb);

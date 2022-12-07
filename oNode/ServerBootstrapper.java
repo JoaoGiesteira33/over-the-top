@@ -1,18 +1,20 @@
 package oNode;
 
-import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class ServerStreamer implements Runnable{
+public class ServerBootstrapper implements Runnable{
     final int PORT = 8080;
     String config_file;
     List<String> connected_nodes;
+    Delay delayList;
 
-    public ServerStreamer(String config_file){
+    public ServerBootstrapper(String config_file){
         this.config_file = config_file;
         this.connected_nodes = new ArrayList<>();
     }
@@ -34,8 +36,9 @@ public class ServerStreamer implements Runnable{
         threadSD.start(overlay,connected_nodes);
 
         //Escutar todos os pedidos
+        ServerSocket s = null;
         try{
-            ServerSocket s = new ServerSocket(this.PORT);
+            s = new ServerSocket(this.PORT);
 
             while(true){
                 Socket clientSocket = s.accept();
@@ -49,6 +52,11 @@ public class ServerStreamer implements Runnable{
                 Thread t = new Thread(ch);
                 t.start();
             }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        try{
+            s.close();
         }catch(IOException e){
             e.printStackTrace();
         }

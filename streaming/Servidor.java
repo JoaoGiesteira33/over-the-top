@@ -8,7 +8,6 @@ package streaming;/* ------------------
 import java.io.*;
 import java.net.*;
 import java.awt.*;
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
@@ -47,6 +46,49 @@ public class Servidor extends JFrame implements ActionListener {
   //--------------------------
   //Constructor
   //--------------------------
+  public Servidor(String nextIp) {
+    //init Frame
+    super("Servidor");
+
+    // init para a parte do servidor
+    sTimer = new Timer(FRAME_PERIOD, this); //init Timer para servidor
+    sTimer.setInitialDelay(0);
+    sTimer.setCoalesce(true);
+    sBuf = new byte[15000]; //allocate memory for the sending buffer
+
+    /*
+     * if()
+     */
+    try {
+	      RTPsocket = new DatagramSocket(); //init RTP socket 
+        ClientIPAddr = InetAddress.getByName(nextIp);
+        System.out.println("Servidor: socket " + ClientIPAddr);
+	      video = new VideoStream(VideoFileName); //init the VideoStream object:
+        System.out.println("Servidor: vai enviar video da file " + VideoFileName);
+
+    } catch (SocketException e) {
+        System.out.println("Servidor: erro no socket: " + e.getMessage());
+    } catch (Exception e) {
+        System.out.println("Servidor: erro no video: " + e.getMessage());
+    }
+
+    //Handler to close the main window
+    addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+	    //stop the timer and exit
+	      sTimer.stop();
+	      System.exit(0);
+      }
+    });
+
+    //GUI:
+    String descricao = "Send frame #" + imagenb;
+    label = new JLabel(descricao, JLabel.CENTER);
+    getContentPane().add(label, BorderLayout.CENTER);
+          
+    sTimer.start();
+  }
+
   public Servidor() {
     //init Frame
     super("Servidor");
@@ -91,7 +133,7 @@ public class Servidor extends JFrame implements ActionListener {
   }
 
   //------------------------------------
-  //main
+  //main -> args: 0=VideoFileName, 1=Ip do proximo
   //------------------------------------
   public static void main(String argv[]) throws Exception
   {
@@ -107,7 +149,7 @@ public class Servidor extends JFrame implements ActionListener {
     File f = new File(VideoFileName);
     if (f.exists()) {
         //Create a Main object 
-        Servidor s = new Servidor();
+        Servidor s = new Servidor(); //Servidor(argv[1]) ip do próximo
         //show GUI: (opcional!)
         s.pack();
         s.setVisible(true);
