@@ -11,12 +11,19 @@ public class ClientHandlerStreamer implements Runnable{
 	final Socket s;
 
     private Map<String,List<String>> overlay;
+    private List<String> connected_nodes;
 
-    public ClientHandlerStreamer(Socket s, DataInputStream din, DataOutputStream dout, Map<String,List<String>> overlay){
+    public ClientHandlerStreamer(Socket s, 
+    DataInputStream din, 
+    DataOutputStream dout,
+    Map<String,List<String>> overlay,
+    List<String> connected_nodes)
+    {
         this.s = s;
         this.dataIn = din;
         this.dataOut = dout;
         this.overlay = overlay;
+        this.connected_nodes = connected_nodes;
     }
 
     @Override
@@ -30,6 +37,10 @@ public class ClientHandlerStreamer implements Runnable{
 
                 if(messageReceived.equals("end")){
                     System.out.println("Closing connection to " + senderIP);
+
+                    //Remover nodo da lista de nodos conectados
+                    this.connected_nodes.remove(senderIP);
+
                     this.s.close();
                     break;
                 }else if(messageReceived.equals("OVERLAY_JOIN_REQUEST")){
@@ -42,9 +53,17 @@ public class ClientHandlerStreamer implements Runnable{
                     for(String ip : vizinhos){
                         this.dataOut.writeUTF(ip);
                     }
+
+                    //Adicionar Nodo à lista de nodos conectados
+                    this.connected_nodes.add(senderIP);
+
                 }else{
                     System.out.println("Unkown Message! Shutting Down!");
                     this.dataOut.writeUTF("Unkown Message! Shutting Down!");
+                    
+                    //Remover nodo da lista de nodos conectados
+                    this.connected_nodes.remove(senderIP);
+                    
                     this.s.close();
                     break;
                 }
