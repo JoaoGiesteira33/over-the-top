@@ -1,18 +1,22 @@
 package oNode;
 
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.io.*;
+import java.util.List;
 
 public class ClientHandler implements Runnable{
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
+    List<String> vizinhos;
 
-    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout){
+    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos){
         this.s = s;
         this.dataIn = din;
         this.dataOut = dout;
+        this.vizinhos = vizinhos;
     }
 
     @Override
@@ -29,9 +33,19 @@ public class ClientHandler implements Runnable{
                     this.s.close();
                     break;
                 }else if(messageReceived.equals("MONITORIZACAO")){
+                    List<String> vizinhosRestantes = new ArrayList<>(vizinhos);
+                    vizinhosRestantes.removeIf(v -> v.equals(this.s.getInetAddress().toString()));
+                    
+                    System.out.println("------------------");
+                    System.out.println("Vizinhos: ");
+                    System.out.println(this.vizinhos);
+                    System.out.println("Received message from: " + this.s.getInetAddress().toString());
+                    System.out.println("Vizinhos filtered");
+                    System.out.println(vizinhosRestantes);
+                    
                     //Handle mensagem de monitorizacao
                     String ipServidor = dataIn.readUTF();
-                    int distanciaServidor = dataIn.readInt();
+                    int distanciaServidor = dataIn.readInt() + 1;
 
                     long currentTime = new Date().getTime();
                     long tempoSaida = dataIn.readLong();

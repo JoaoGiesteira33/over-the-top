@@ -51,7 +51,7 @@ public class oNode{
                     stream desejado"
             */
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server();
+            Server s = new Server(vizinhos);
             Thread sThread = new Thread(s);
             sThread.start();
 
@@ -66,7 +66,7 @@ public class oNode{
             String bootstrapper = args[1];
 
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server();
+            Server s = new Server(vizinhos);
             Thread sThread = new Thread(s);
             sThread.start();
 
@@ -84,7 +84,7 @@ public class oNode{
             String bootstrapper = args[0];
 
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server();
+            Server s = new Server(vizinhos);
             Thread sThread = new Thread(s);
             sThread.start();
             

@@ -1,13 +1,15 @@
 package oNode;
 
 import java.net.*;
+import java.util.List;
 import java.io.*;
 
 public class Server implements Runnable{
     final int PORT = 8090;
-    //List<InformacaoServer> 
+    List<String> vizinhos; 
 
-    public Server(){
+    public Server(List<String> vizinhos){
+        this.vizinhos = vizinhos;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class Server implements Runnable{
 				DataOutputStream dataOut = new DataOutputStream(clientSocket.getOutputStream());
 
                 //New thread for new connection
-                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut);
+                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut,vizinhos);
                 Thread t = new Thread(ch);
                 t.start();
             }
