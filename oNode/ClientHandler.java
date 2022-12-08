@@ -77,7 +77,7 @@ public class ClientHandler implements Runnable{
                     System.out.println("-------------------");
 
                     //Guardar rota
-                    Rota novaRota = new Rota(ipServidor, senderIP, distanciaServidor, delay);
+                    Rota novaRota = new Rota(ipServidor.substring(1), senderIP, distanciaServidor, delay);
                     if(this.rotas.insereRota(novaRota)){
                         System.out.println("Inserimos a rota, continuar a enviá-la.");
                         //Se inserirmos a rota continuamos a propagá-la
@@ -85,6 +85,7 @@ public class ClientHandler implements Runnable{
                             reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor,tempoSaida);
                         }
                     }
+                    System.out.println("------TABELA DE ROTAS------");
                     System.out.println(this.rotas.toString());
                 }else{
                     System.out.println("Mensagem desconhecida. Terminando conexão.");

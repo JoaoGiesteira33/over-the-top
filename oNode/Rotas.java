@@ -43,7 +43,7 @@ public class Rotas {
         //Se já existe rota verificamos se compensa adicionar nova rota
         boolean adiciona = false;
         for(Rota rota : this.rotas){
-            if(rota.server.equals(server) && rota.delay < r.delay){
+            if(rota.server.equals(server) && rota.delay > r.delay){
                 adiciona = true;
             }
         }
