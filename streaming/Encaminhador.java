@@ -58,7 +58,7 @@ public class Encaminhador extends JFrame implements ActionListener {
     try {
         // socket e video
 	      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-          RTPsocket_in.setSoTimeout(2000); // setimeout to 5s
+        RTPsocket_in.setSoTimeout(2000); // setimeout to 5s
     } catch (SocketException e) {
         System.out.println("Cliente: erro no socket: " + e.getMessage());
     }
@@ -69,7 +69,7 @@ public class Encaminhador extends JFrame implements ActionListener {
   //------------------------------------
   public static void main(String argv[]) throws Exception
   { 
-        InetAddress ia = InetAddress.getByName(argv[0]);
+        InetAddress ia = InetAddress.getByName("10.0.18.20");//(argv[0]);
         Encaminhador e = new Encaminhador(ia);
   }
 
