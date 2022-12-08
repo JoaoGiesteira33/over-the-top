@@ -7,7 +7,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-import org.junit.jupiter.api.Timeout;
 
 public class Encaminhador{
     
