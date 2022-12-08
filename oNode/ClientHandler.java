@@ -78,6 +78,7 @@ public class ClientHandler implements Runnable{
                     //Guardar rota
                     Rota novaRota = new Rota(ipServidor, senderIP, distanciaServidor, tempoSaida);
                     if(this.rotas.insereRota(novaRota)){
+                        System.out.println("Inserimos a rota, continuar a enviá-la.");
                         //Se inserirmos a rota continuamos a propagá-la
                         for(String vizinho : vizinhosRestantes){
                             reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor,tempoSaida);
