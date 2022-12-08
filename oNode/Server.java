@@ -7,9 +7,11 @@ import java.io.*;
 public class Server implements Runnable{
     final int PORT = 8090;
     List<String> vizinhos; 
+    Rotas rotas;
 
-    public Server(List<String> vizinhos){
+    public Server(List<String> vizinhos, Rotas rotas){
         this.vizinhos = vizinhos;
+        this.rotas = rotas;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class Server implements Runnable{
 				DataOutputStream dataOut = new DataOutputStream(clientSocket.getOutputStream());
 
                 //New thread for new connection
-                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut,vizinhos);
+                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut,vizinhos,rotas);
                 Thread t = new Thread(ch);
                 t.start();
             }
