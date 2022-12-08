@@ -21,6 +21,31 @@ public class Rotas {
         return existe;
     }
 
+    private long menorDelayServer(String serverIP){
+        long menorDelay = Long.MAX_VALUE;
+
+        for(Rota r : this.rotas){
+            if(r.server.equals(serverIP) && r.delay < menorDelay){
+                menorDelay = r.delay;
+            }
+        }
+
+        return menorDelay;
+    }
+
+    public Rota melhorRotaServer(String serverIP){
+        if(this.rotas.size() == 0) return null;
+        
+        Rota melhorRota = this.rotas.get(0);
+        for(int i = 1 ; i < this.rotas.size() ; i++){
+            Rota itRota = this.rotas.get(i);
+            if(itRota.server.equals(serverIP) && itRota.delay < melhorRota.delay)
+                melhorRota = itRota;
+        }
+
+        return melhorRota;
+    }
+
     /*
      * Método que insere uma rota na lista de rotas.
      * 
@@ -41,14 +66,9 @@ public class Rotas {
         }
 
         //Se já existe rota verificamos se compensa adicionar nova rota
-        boolean adiciona = false;
-        for(Rota rota : this.rotas){
-            if(rota.server.equals(server) && rota.delay < r.delay){
-                adiciona = true;
-            }
-        }
-
-        if(adiciona){
+        long menorDelay = menorDelayServer(server);
+        if(r.delay < menorDelay)
+        {
             this.rotas.add(r);
             return true;
         }
