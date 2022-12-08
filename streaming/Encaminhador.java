@@ -60,7 +60,8 @@ public class Encaminhador{
         // socket e video
 	      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
         RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
-        cTimer.start();
+	while(true)
+       		cTimer.start();
     } catch (SocketException e) {
         System.out.println("Cliente: erro no socket: " + e.getMessage());
     }
@@ -98,6 +99,9 @@ public class Encaminhador{
                 System.out.println("In try");
 	              //receive the DP from the socket:
 	              RTPsocket_in.receive(rcvdp);
+		      System.out.println("Packet Received");
+		      rcvdp.setAddress(ClientIPAddr);
+		      rcvdp.setPort(RTP_RCV_PORT);
 	              //create an RTPpacket object from the DP
                 /* 
 	              RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
@@ -115,9 +119,10 @@ public class Encaminhador{
                   rtp_packet.getpacket(packet_bits);
                   //send the packet as a DatagramPacket over the UDP socket 
                   */
-                  RTPsocket_out = new DatagramSocket(RTP_dest_port ,ClientIPAddr);
+                  RTPsocket_out = new DatagramSocket();
+		  System.out.println("Connected to out");
                   RTPsocket_out.send(rcvdp);
-                  System.out.println("Send frame #"+imagenb);
+                  System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
         
                   //update GUI
                   //label.setText("Send frame #" + imagenb);

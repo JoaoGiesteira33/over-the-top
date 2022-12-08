@@ -86,7 +86,7 @@ public class Cliente {
     try {
     // socket e video
 	      RTPsocket = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-        RTPsocket.setSoTimeout(5000); // setimeout to 5s
+        RTPsocket.setSoTimeout(500); // setimeout to 5s
     } catch (SocketException e) {
         System.out.println("Cliente: erro no socket: " + e.getMessage());
     }
@@ -145,12 +145,15 @@ public class Cliente {
   //------------------------------------
   
   class clientTimerListener implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
       
       //Construct a DatagramPacket to receive data from the UDP socket
       rcvdp = new DatagramPacket(cBuf, cBuf.length);
+	
 
       try{
+//	       System.out.println(Inet4Address.getLocalHost().getHostAddress());
+
 	        //receive the DP from the socket:
 	        RTPsocket.receive(rcvdp);
 
@@ -179,7 +182,7 @@ public class Cliente {
       catch (InterruptedIOException iioe){
 	        System.out.println("Nothing to read");
       }
-      catch (IOException ioe) {
+      catch (Exception ioe) {
 	        System.out.println("Exception caught: "+ioe);
       }
     }

@@ -142,7 +142,7 @@ public class Servidor extends JFrame implements ActionListener {
         VideoFileName = argv[0];
         System.out.println("Servidor: VideoFileName indicado como parametro: " + VideoFileName);
     } else  {
-        VideoFileName = "/home/thatch/Desktop/4ano/ESR/over-the-top/streaming/movie.Mjpeg";
+        VideoFileName = "/home/core/Desktop/tp2/over-the-top/streaming/movie.Mjpeg";
         System.out.println("Servidor: parametro não foi indicado. VideoFileName = " + VideoFileName);
     }
 
