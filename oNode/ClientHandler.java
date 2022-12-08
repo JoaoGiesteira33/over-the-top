@@ -22,7 +22,7 @@ public class ClientHandler implements Runnable{
     @Override
     public void run(){
         String messageReceived;
-        String answer = "";
+        String senderIP = this.s.getInetAddress().toString().substring(1);
 
         while(true){
             try{
@@ -34,12 +34,12 @@ public class ClientHandler implements Runnable{
                     break;
                 }else if(messageReceived.equals("MONITORIZACAO")){
                     List<String> vizinhosRestantes = new ArrayList<>(vizinhos);
-                    vizinhosRestantes.removeIf(v -> v.equals(this.s.getInetAddress().toString()));
+                    vizinhosRestantes.removeIf(v -> v.equals(senderIP));
                     
                     System.out.println("------------------");
                     System.out.println("Vizinhos: ");
                     System.out.println(this.vizinhos);
-                    System.out.println("Received message from: " + this.s.getInetAddress().toString());
+                    System.out.println("Received message from: " + senderIP);
                     System.out.println("Vizinhos filtered");
                     System.out.println(vizinhosRestantes);
                     
