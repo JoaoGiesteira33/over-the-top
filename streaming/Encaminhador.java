@@ -49,16 +49,17 @@ public class Encaminhador{
 
     //init para a parte do cliente
     //--------------------------
-    cTimer = new Timer(FRAME_PERIOD, new clientTimerListener());
+    cTimer = new Timer(20, new clientTimerListener());
     cTimer.setInitialDelay(0);
     cTimer.setCoalesce(true);
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
+    sBuf = new byte[15000];
     this.ClientIPAddr = ClientIPAddress;
-
+    
     try {
         // socket e video
 	      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-        RTPsocket_in.setSoTimeout(2000); // setimeout to 5s
+        RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
         cTimer.start();
     } catch (SocketException e) {
         System.out.println("Cliente: erro no socket: " + e.getMessage());
@@ -68,11 +69,15 @@ public class Encaminhador{
   //------------------------------------
   //main: args: 0=ipNext
   //------------------------------------
-  public static void main(String argv[]) throws Exception
-  { 
+  public static void main(String argv[]) 
+  {   
+    try{
         InetAddress ia = InetAddress.getByName("10.0.18.20");//(argv[0]);
         Encaminhador e = new Encaminhador(ia);
-        
+    }
+    catch(UnknownHostException e){
+      System.out.println("ERRO: "+e);
+    }
   }
 
   //------------------------------------
@@ -80,14 +85,15 @@ public class Encaminhador{
   //------------------------------------
   
   class clientTimerListener implements ActionListener {
+    @Override
     public void actionPerformed(ActionEvent e) {
-        
+      System.out.println("In clientTimerListener");
         rcvdp = new DatagramPacket(cBuf, cBuf.length);
         if(imagenb < VIDEO_LENGTH){
             imagenb++;
             //Construct a DatagramPacket to receive data from the UDP socket
             //rcvdp = new DatagramPacket(cBuf, cBuf.length);
-            senddp = new DatagramPacket(sBuf, sBuf.length);
+            //senddp = new DatagramPacket(sBuf, sBuf.length);
             try{
                 System.out.println("In try");
 	              //receive the DP from the socket:
