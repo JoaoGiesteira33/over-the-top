@@ -7,7 +7,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-public class Encaminhador extends JFrame implements ActionListener {
+public class Encaminhador{
     
   //GUI:
   //----------------
@@ -49,7 +49,7 @@ public class Encaminhador extends JFrame implements ActionListener {
 
     //init para a parte do cliente
     //--------------------------
-    cTimer = new Timer(FRAME_PERIOD, this);
+    cTimer = new Timer(FRAME_PERIOD, new clientTimerListener());
     cTimer.setInitialDelay(0);
     cTimer.setCoalesce(true);
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
@@ -59,6 +59,7 @@ public class Encaminhador extends JFrame implements ActionListener {
         // socket e video
 	      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
         RTPsocket_in.setSoTimeout(2000); // setimeout to 5s
+        cTimer.start();
     } catch (SocketException e) {
         System.out.println("Cliente: erro no socket: " + e.getMessage());
     }
@@ -71,14 +72,16 @@ public class Encaminhador extends JFrame implements ActionListener {
   { 
         InetAddress ia = InetAddress.getByName("10.0.18.20");//(argv[0]);
         Encaminhador e = new Encaminhador(ia);
+        
   }
 
   //------------------------------------
   //Handler for timer (para cliente)
   //------------------------------------
   
-  
+  class clientTimerListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
+        
         
         if(imagenb < VIDEO_LENGTH){
             imagenb++;
@@ -86,6 +89,7 @@ public class Encaminhador extends JFrame implements ActionListener {
             rcvdp = new DatagramPacket(cBuf, cBuf.length);
             senddp = new DatagramPacket(sBuf, sBuf.length);
             try{
+                System.out.println("In try");
 	              //receive the DP from the socket:
 	              RTPsocket_in.receive(rcvdp);
 	              //create an RTPpacket object from the DP
@@ -124,6 +128,6 @@ public class Encaminhador extends JFrame implements ActionListener {
                 cTimer.stop();
             }
     }
-
+  }
 }
 
