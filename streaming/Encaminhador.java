@@ -7,7 +7,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-public class Encaminhador extends JFrame implements ActionListener {
+public class Encaminhador{
     
   //GUI:
   //----------------
