@@ -1,88 +1,41 @@
 package oNode;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Rotas {
-    List<Rota> rotas;
+    Map<String,Rota> rotas;
 
     public Rotas(){
-        this.rotas = new ArrayList<>();
+        this.rotas = new HashMap<>();
     }
 
-    private boolean existeRota(String serverIP){
-        boolean existe = false;
-
-        for(Rota r : this.rotas){
-            if(r.server.equals(serverIP))
-                existe = true;
-        }
-
-        return existe;
-    }
-
-    private long menorDelayServer(String serverIP){
-        long menorDelay = Long.MAX_VALUE;
-
-        for(Rota r : this.rotas){
-            if(r.server.equals(serverIP) && r.delay < menorDelay){
-                menorDelay = r.delay;
-            }
-        }
-
-        return menorDelay;
-    }
-
-    public Rota melhorRotaServer(String serverIP){
-        if(this.rotas.size() == 0) return null;
-        
-        Rota melhorRota = this.rotas.get(0);
-        for(int i = 1 ; i < this.rotas.size() ; i++){
-            Rota itRota = this.rotas.get(i);
-            if(itRota.server.equals(serverIP) && itRota.delay < melhorRota.delay)
-                melhorRota = itRota;
-        }
-
-        return melhorRota;
-    }
-
-    /*
-     * Método que insere uma rota na lista de rotas.
-     * 
-     * Primeiro verifica se já existe um caminho melhor.
-     * 
-     * Se já existir um caminho melhor não vale a pena guardar 
-     * esta rota e continuar a propagála, retorna FALSE.
-     * 
-     * Se ainda não existe ou é pior adiciona-se a nova rota e retorna TRUE.
-     */
-    public boolean insereRota(Rota r){
-        String server = r.server;
-        
+    public void insereRota(Rota r, String server){
         //Verificar se já existe alguma rota para este servidor
-        if(!existeRota(server)){
-            this.rotas.add(r);
-            return true;
+        if(!this.rotas.containsKey(server)){
+            this.rotas.put(server, r);
         }
 
         //Se já existe rota verificamos se compensa adicionar nova rota
-        long menorDelay = menorDelayServer(server);
+        long menorDelay = this.rotas.get(server).delay;
         if(r.delay < menorDelay)
         {
-            this.rotas.add(r);
-            return true;
+            //Trocar rota para este servidor
+            this.rotas.put(server, r);
         }
-
-        return false;
     }
 
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
 
-        for(Rota r : this.rotas)
-            sb.append(r.toString());
-        
+        for(Map.Entry<String,Rota> r : this.rotas.entrySet())
+            sb.append("Server: ").append(r.getKey()).append("\n").append(r.getValue().toString());
+ 
         return sb.toString();    
     }
 }

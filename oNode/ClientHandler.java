@@ -81,21 +81,17 @@ public class ClientHandler implements Runnable{
                     System.out.println("-------------------");
 
                     //Guardar rota
-                    Rota novaRota = new Rota(ipServidor.substring(1), senderIP, distanciaServidor, newDelay);
-                    if(this.rotas.insereRota(novaRota)){
-                        System.out.println("Inserimos a rota, continuar a enviá-la.");
-                        //Se inserirmos a rota continuamos a propagá-la
-                        for(String vizinho : vizinhosRestantes){
-                            reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor, newDelay);
-                        }
-                    }else{ //Se não inserirmos enviamos a melhor rota até ao momento para este server
-                        System.out.println("Rota não inserida, enviar melhor rota guardada.");
-                        Rota melhorRota = this.rotas.melhorRotaServer(ipServidor.substring(1));
-                        //Propagar melhor rota para os vizinhos
-                        for(String vizinho : vizinhosRestantes){
-                            reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
-                        }
+                    Rota novaRota = new Rota(senderIP, distanciaServidor, newDelay);
+                    this.rotas.insereRota(novaRota, ipServidor.substring(1));
+
+                    //Obter melhor rota guardada (inserirRota nas rotas pode ter ignorado nova entrada)
+                    Rota melhorRota = this.rotas.rotas.get(ipServidor.substring(1));
+                    
+                    //Enviar melhor rota para restantes vizinhos
+                    for(String vizinho : vizinhosRestantes){
+                        reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
                     }
+
                     System.out.println("------TABELA DE ROTAS------");
                     System.out.println(this.rotas.toString());
                 }else{
