@@ -82,11 +82,11 @@ public class Encaminhador{
   class clientTimerListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
-        
+        rcvdp = new DatagramPacket(cBuf, cBuf.length);
         if(imagenb < VIDEO_LENGTH){
             imagenb++;
             //Construct a DatagramPacket to receive data from the UDP socket
-            rcvdp = new DatagramPacket(cBuf, cBuf.length);
+            //rcvdp = new DatagramPacket(cBuf, cBuf.length);
             senddp = new DatagramPacket(sBuf, sBuf.length);
             try{
                 System.out.println("In try");
