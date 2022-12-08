@@ -22,7 +22,6 @@ public class StreamerMonitorizacaoRede implements Runnable{
                     try{
                         Socket s = new Socket(v,8090);
                         DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
-                        DataInputStream dataIn = new DataInputStream(s.getInputStream());
 
                         dataOut.writeUTF("MONITORIZACAO");
                         dataOut.writeUTF(s.getLocalAddress().toString());
@@ -31,6 +30,7 @@ public class StreamerMonitorizacaoRede implements Runnable{
 
                         dataOut.writeUTF("end");
                         s.close();
+                        System.out.println("Mensagem de Monitorização enviada...");
                     }catch(Exception e){
                         System.out.println("Vizinho ainda não conectado (" + v + ")");
                     }

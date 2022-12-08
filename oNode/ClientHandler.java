@@ -7,16 +7,20 @@ import java.io.*;
 import java.util.List;
 
 public class ClientHandler implements Runnable{
+
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
-    List<String> vizinhos;
 
-    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos){
+    List<String> vizinhos;
+    Rotas rotas;
+
+    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos, Rotas rotas){
         this.s = s;
         this.dataIn = din;
         this.dataOut = dout;
         this.vizinhos = vizinhos;
+        this.rotas = rotas;
     }
 
     private void reenviarMensagemMonitorizacao(String vizinho,String ipServidor,int distanciaServidor,long tempoSaida){
@@ -70,9 +74,16 @@ public class ClientHandler implements Runnable{
 
                     System.out.println("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay: " + (currentTime - tempoSaida) + "ms");
                     System.out.println("-------------------");
-                    for(String vizinho : vizinhosRestantes){
-                        reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor,tempoSaida);
+
+                    //Guardar rota
+                    Rota novaRota = new Rota(ipServidor, senderIP, distanciaServidor, tempoSaida);
+                    if(this.rotas.insereRota(novaRota)){
+                        //Se inserirmos a rota continuamos a propagá-la
+                        for(String vizinho : vizinhosRestantes){
+                            reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor,tempoSaida);
+                        }
                     }
+                    System.out.println(this.rotas.toString());
                 }else{
                     System.out.println("Mensagem desconhecida. Terminando conexão.");
                     this.s.close();

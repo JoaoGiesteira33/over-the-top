@@ -31,6 +31,7 @@ public class oNode{
                 > oNode -c -s -b cfg1_1.
           */
         List<String> vizinhos = new ArrayList<>();
+        Rotas rotas = new Rotas();
 
         if(args.length == 2 && args[0].equals("-b")){ //Server para nodo bootstrapper
             String config_file = args[1];
@@ -51,7 +52,7 @@ public class oNode{
                     stream desejado"
             */
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server(vizinhos);
+            Server s = new Server(vizinhos,rotas);
             Thread sThread = new Thread(s);
             sThread.start();
 
@@ -66,7 +67,7 @@ public class oNode{
             String bootstrapper = args[1];
 
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server(vizinhos);
+            Server s = new Server(vizinhos,rotas);
             Thread sThread = new Thread(s);
             sThread.start();
 
@@ -84,7 +85,7 @@ public class oNode{
             String bootstrapper = args[0];
 
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server(vizinhos);
+            Server s = new Server(vizinhos,rotas);
             Thread sThread = new Thread(s);
             sThread.start();
             
