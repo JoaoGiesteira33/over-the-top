@@ -71,12 +71,13 @@ public class ClientHandler implements Runnable{
 
                     long currentTime = new Date().getTime();
                     long tempoSaida = dataIn.readLong();
+                    long delay = currentTime - tempoSaida;
 
-                    System.out.println("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay: " + (currentTime - tempoSaida) + "ms");
+                    System.out.println("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay: " + delay + "ms");
                     System.out.println("-------------------");
 
                     //Guardar rota
-                    Rota novaRota = new Rota(ipServidor, senderIP, distanciaServidor, tempoSaida);
+                    Rota novaRota = new Rota(ipServidor, senderIP, distanciaServidor, delay);
                     if(this.rotas.insereRota(novaRota)){
                         System.out.println("Inserimos a rota, continuar a enviá-la.");
                         //Se inserirmos a rota continuamos a propagá-la
