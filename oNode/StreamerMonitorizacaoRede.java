@@ -7,7 +7,7 @@ import java.io.*;
 
 public class StreamerMonitorizacaoRede implements Runnable{
     List<String> vizinhos;
-    final int intervaloMensagemMS = 3000; //3 segundos entre mensagens
+    final int intervaloMensagemMS = 5000; //5 segundos entre mensagens
 
     public StreamerMonitorizacaoRede(List<String> vizinhos){
         this.vizinhos = vizinhos;
@@ -29,7 +29,6 @@ public class StreamerMonitorizacaoRede implements Runnable{
                         dataOut.writeLong(new Date().getTime()); //Tempo de saida
                         dataOut.writeLong(0); //Delay acumulado
                         
-
                         dataOut.writeUTF("end");
                         s.close();
                         System.out.println("Mensagem de Monitorização enviada...");

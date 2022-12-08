@@ -86,7 +86,7 @@ public class ClientHandler implements Runnable{
                         System.out.println("Inserimos a rota, continuar a enviá-la.");
                         //Se inserirmos a rota continuamos a propagá-la
                         for(String vizinho : vizinhosRestantes){
-                            reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor,newDelay);
+                            reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor, newDelay);
                         }
                     }else{ //Se não inserirmos enviamos a melhor rota até ao momento para este server
                         System.out.println("Rota não inserida, enviar melhor rota guardada.");
