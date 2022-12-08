@@ -17,7 +17,7 @@ public class Rota {
 
         sb.append("Nodo Anterior: ").append(this.nodoAnterior).append("\n");
         sb.append("Distancia: ").append(this.distancia).append("\n");
-        sb.append("Delay: ").append(this.delay).append("\n").append("-----------------------");
+        sb.append("Delay: ").append(this.delay).append("\n").append("-----------------------\n");
 
         return sb.toString();
     }
