@@ -33,6 +33,19 @@ public class Rotas {
         return menorDelay;
     }
 
+    public Rota melhorRotaServer(String serverIP){
+        if(this.rotas.size() == 0) return null;
+        
+        Rota melhorRota = this.rotas.get(0);
+        for(int i = 1 ; i < this.rotas.size() ; i++){
+            Rota itRota = this.rotas.get(i);
+            if(itRota.server.equals(serverIP) && itRota.delay < melhorRota.delay)
+                melhorRota = itRota;
+        }
+
+        return melhorRota;
+    }
+
     /*
      * Método que insere uma rota na lista de rotas.
      * 

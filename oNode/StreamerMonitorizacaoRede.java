@@ -26,7 +26,9 @@ public class StreamerMonitorizacaoRede implements Runnable{
                         dataOut.writeUTF("MONITORIZACAO");
                         dataOut.writeUTF(s.getLocalAddress().toString());
                         dataOut.writeInt(0);
-                        dataOut.writeLong(new Date().getTime());
+                        dataOut.writeLong(new Date().getTime()); //Tempo de saida
+                        dataOut.writeLong(0); //Delay acumulado
+                        
 
                         dataOut.writeUTF("end");
                         s.close();

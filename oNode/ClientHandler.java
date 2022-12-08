@@ -23,7 +23,7 @@ public class ClientHandler implements Runnable{
         this.rotas = rotas;
     }
 
-    private void reenviarMensagemMonitorizacao(String vizinho,String ipServidor,int distanciaServidor,long tempoSaida){
+    private void reenviarMensagemMonitorizacao(String vizinho,String ipServidor,int distanciaServidor,long delayAcumulado){
         try{
             Socket s = new Socket(vizinho,8090);
             DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
@@ -31,7 +31,8 @@ public class ClientHandler implements Runnable{
             dataOut.writeUTF("MONITORIZACAO");
             dataOut.writeUTF(ipServidor);
             dataOut.writeInt(distanciaServidor);
-            dataOut.writeLong(tempoSaida);
+            dataOut.writeLong(new Date().getTime());
+            dataOut.writeLong(delayAcumulado);
 
             dataOut.writeUTF("end");
             s.close();
@@ -71,18 +72,28 @@ public class ClientHandler implements Runnable{
 
                     long currentTime = new Date().getTime();
                     long tempoSaida = dataIn.readLong();
-                    long delay = currentTime - tempoSaida;
+                    long delayAcumulado = dataIn.readLong();
 
-                    System.out.println("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay: " + delay + "ms");
+                    long delay = currentTime - tempoSaida;
+                    long newDelay = delay + delayAcumulado;
+
+                    System.out.println("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay Total: " + newDelay + "ms" + " | Delay: " + delay + "ms");
                     System.out.println("-------------------");
 
                     //Guardar rota
-                    Rota novaRota = new Rota(ipServidor.substring(1), senderIP, distanciaServidor, delay);
+                    Rota novaRota = new Rota(ipServidor.substring(1), senderIP, distanciaServidor, newDelay);
                     if(this.rotas.insereRota(novaRota)){
                         System.out.println("Inserimos a rota, continuar a enviá-la.");
                         //Se inserirmos a rota continuamos a propagá-la
                         for(String vizinho : vizinhosRestantes){
-                            reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor,tempoSaida);
+                            reenviarMensagemMonitorizacao(vizinho,ipServidor,distanciaServidor,newDelay);
+                        }
+                    }else{ //Se não inserirmos enviamos a melhor rota até ao momento para este server
+                        System.out.println("Rota não inserida, enviar melhor rota guardada.");
+                        Rota melhorRota = this.rotas.melhorRotaServer(ipServidor.substring(1));
+                        //Propagar melhor rota para os vizinhos
+                        for(String vizinho : vizinhosRestantes){
+                            reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
                         }
                     }
                     System.out.println("------TABELA DE ROTAS------");
