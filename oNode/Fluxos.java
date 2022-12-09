@@ -23,7 +23,7 @@ public class Fluxos {
         return false;
     }
 
-    private void removeDestino(String destino){
+    public void removeDestino(String destino){
         for(Fluxo f : this.fluxos){
             if(f.destinos.remove(destino))
                 break;
@@ -48,7 +48,33 @@ public class Fluxos {
                 }
             }
         }
+    }
 
+    public void inserFluxoServer(String senderIP){
+        //Se ainda não existir fluxo a sair deste streamer criamos um novo
+        if(this.fluxos.size() == 0){
+            List<String> destinos = new ArrayList<>();
+            destinos.add(senderIP);
+            this.fluxos.add(new Fluxo("", "", destinos, false));
+            return;
+        }
 
+        //Se já existe fluxo, adicionamos este destino se ainda lá não estava
+        if(this.fluxos.get(0).destinos.contains(senderIP)){
+            return;
+        }else{
+            this.fluxos.get(0).destinos.add(senderIP);
+        }
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+
+        for(Fluxo f : this.fluxos){
+            sb.append(f.toString());
+        }
+
+        return sb.toString();
     }
 }

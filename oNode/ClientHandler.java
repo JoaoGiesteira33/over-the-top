@@ -23,7 +23,6 @@ public class ClientHandler implements Runnable{
         this.vizinhos = vizinhos;
         this.rotas = rotas;
         this.fluxos = fluxos;
-        System.out.println("MY IP: " + s.getLocalAddress().toString().substring(1));
     }
 
     private void reenviarMensagemMonitorizacao(String vizinho,String ipServidor,int distanciaServidor,long delayAcumulado){
@@ -59,10 +58,25 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    private void sinalizarFimFluxo(String ipProximoNodo){
+        try{
+            Socket s = new Socket(ipProximoNodo, 8090);
+            DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
+
+            dataOut.writeUTF("FLUXO-END");
+
+            dataOut.writeUTF("end");
+            s.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run(){
         String messageReceived;
         String senderIP = this.s.getInetAddress().toString().substring(1);
+        String myIP = this.s.getLocalAddress().toString().substring(1);
 
         while(true){
             try{
@@ -114,20 +128,38 @@ public class ClientHandler implements Runnable{
 
                     System.out.println("------TABELA DE ROTAS------");
                     System.out.println(this.rotas.toString());
-                }else if(messageReceived.equals("FLUXO-C")){
+                }else if(messageReceived.equals("FLUXO")){
                     //Servidor de onde vamos receber a stream
                     String ipServidor = dataIn.readUTF();
-
-                    //Descobrir proximo nodo para chegar ao servidor recebido
-                    String proximoNodo = this.rotas.rotas.get(ipServidor).nodoAnterior;
-
-                    //Atualizacao de tabela de fluxo
-                    this.fluxos.insereFluxo(ipServidor,senderIP,proximoNodo);
-
-                    //Enviar fluxos
-                    for(Fluxo f : this.fluxos.fluxos){
-                        reenviarMensagemFluxo(f.fonte, f.origem);
+                    
+                    //Verificamos se chegamos ao servidor desejado
+                    if(ipServidor.equals(myIP)){
+                        this.fluxos.inserFluxoServer(senderIP);
+                    }else{
+                        //Descobrir proximo nodo para chegar ao servidor recebido
+                        String proximoNodo = this.rotas.rotas.get(ipServidor).nodoAnterior;
+                        
+                        //Atualizacao de tabela de fluxo
+                        this.fluxos.insereFluxo(ipServidor,senderIP,proximoNodo);
+                        
+                        //Enviar fluxos
+                        for(Fluxo f : this.fluxos.fluxos){
+                            if(f.destinos.isEmpty()){ //Já não se quer stream deste servidor, vamos sinalizar
+                                sinalizarFimFluxo(f.origem);
+                            }else{
+                                reenviarMensagemFluxo(f.fonte, f.origem);
+                            }
+                        }
                     }
+
+                    System.out.println("********TABELA DE FLUXOS********");
+                    System.out.println(this.fluxos.toString());
+                }else if(messageReceived.equals("FLUXO-END")){
+                    //Remover IP de onde recebemos esta mensagem da lista de destinos
+                    this.fluxos.removeDestino(senderIP);
+
+                    System.out.println("********TABELA DE FLUXOS********");
+                    System.out.println(this.fluxos.toString());
                 }else{
                     System.out.println("Mensagem desconhecida. Terminando conexão.");
                     this.s.close();

@@ -5,6 +5,8 @@ import java.net.*;
 import java.io.*;
 
 public class DifusaoFluxo implements Runnable{
+    final int intervaloMensagemMS = 5000; //5 segundos entre mensagens
+    
     Fluxos fluxos;
     Rotas rotas;
     List<String> vizinhos;
@@ -20,24 +22,29 @@ public class DifusaoFluxo implements Runnable{
         try{
             Thread.sleep(2000); //Esperar por construção de rotas
 
-            try{
-                //Obter server mais favorável (menos delay)
-                String melhorServer = this.rotas.servidorMenosDelay();
-                Rota melhorRota = this.rotas.rotas.get(melhorServer);
-                String proximoNodo = melhorRota.nodoAnterior;
+            while(true){
+                try{
+                    //Obter server mais favorável (menos delay)
+                    String melhorServer = this.rotas.servidorMenosDelay();
+                    Rota melhorRota = this.rotas.rotas.get(melhorServer);
+                    String proximoNodo = melhorRota.nodoAnterior;
+                    
+                    Socket s = new Socket(proximoNodo,8090);
+                    DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
+                    
+                    //Enviamos ao próximo nodo qual o servidor
+                    //a que nos desejamos conectar.
+                    dataOut.writeUTF("FLUXO");
+                    dataOut.writeUTF(melhorServer);
+                    
+                    dataOut.writeUTF("end");
+                    s.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
 
-                Socket s = new Socket(proximoNodo,8090);
-                DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
-
-                //Enviamos ao próximo nodo qual o servidor
-                //a que nos desejamos conectar.
-                dataOut.writeUTF("FLUXO-C");
-                dataOut.writeUTF(melhorServer);
-
-                dataOut.writeUTF("end");
-                s.close();
-            }catch(Exception e){
-                e.printStackTrace();
+                //Esperar para voltar a enviar mensagem
+                Thread.sleep(intervaloMensagemMS);
             }
         }catch(InterruptedException e){
             e.printStackTrace();

@@ -15,5 +15,17 @@ public class Fluxo {
         this.ativo = ativo;
     }
 
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
 
+        sb.append("Server: ").append(fonte).append("\n");
+        sb.append("Anterior: ").append(origem).append("\n"); 
+        sb.append("Destinos: ");
+        for(String d : this.destinos)
+            sb.append(d).append(" | ");
+        sb.append("\n").append("Estado: ").append(ativo).append("\n").append("-.-.-.-\n");
+
+        return sb.toString();
+    }
 }
