@@ -33,7 +33,7 @@ public class DifusaoFluxo implements Runnable{
                 //a que nos desejamos conectar.
                 dataOut.writeUTF("FLUXO-C");
                 dataOut.writeUTF(melhorServer);
-                
+
                 dataOut.writeUTF("end");
                 s.close();
             }catch(Exception e){

@@ -23,6 +23,7 @@ public class ClientHandler implements Runnable{
         this.vizinhos = vizinhos;
         this.rotas = rotas;
         this.fluxos = fluxos;
+        System.out.println("MY IP: " + s.getLocalAddress().toString().substring(1));
     }
 
     private void reenviarMensagemMonitorizacao(String vizinho,String ipServidor,int distanciaServidor,long delayAcumulado){
@@ -40,6 +41,21 @@ public class ClientHandler implements Runnable{
             s.close();
         }catch(Exception e){
             System.out.println("Vizinho ainda não conectado (" + vizinho + ")");
+        }
+    }
+
+    private void reenviarMensagemFluxo(String ipServidor, String ipProximoNodo){
+        try{
+            Socket s = new Socket(ipProximoNodo, 8090);
+            DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
+
+            dataOut.writeUTF("FLUXO");
+            dataOut.writeUTF(ipServidor);
+
+            dataOut.writeUTF("end");
+            s.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -99,7 +115,19 @@ public class ClientHandler implements Runnable{
                     System.out.println("------TABELA DE ROTAS------");
                     System.out.println(this.rotas.toString());
                 }else if(messageReceived.equals("FLUXO-C")){
+                    //Servidor de onde vamos receber a stream
+                    String ipServidor = dataIn.readUTF();
 
+                    //Descobrir proximo nodo para chegar ao servidor recebido
+                    String proximoNodo = this.rotas.rotas.get(ipServidor).nodoAnterior;
+
+                    //Atualizacao de tabela de fluxo
+                    this.fluxos.insereFluxo(ipServidor,senderIP,proximoNodo);
+
+                    //Enviar fluxos
+                    for(Fluxo f : this.fluxos.fluxos){
+                        reenviarMensagemFluxo(f.fonte, f.origem);
+                    }
                 }else{
                     System.out.println("Mensagem desconhecida. Terminando conexão.");
                     this.s.close();
