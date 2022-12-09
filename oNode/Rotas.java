@@ -29,14 +29,18 @@ public class Rotas {
         //Verificar se já existe alguma rota para este servidor
         if(!this.rotas.containsKey(server)){
             this.rotas.put(server, r);
-        }
+        }else{
+            //Obter rota atual para o servidor dado
+            Rota atual = this.rotas.get(server);
 
-        //Se já existe rota verificamos se compensa adicionar nova rota
-        long menorDelay = this.rotas.get(server).delay;
-        if(r.delay < menorDelay)
-        {
-            //Trocar rota para este servidor
-            this.rotas.put(server, r);
+            //Verificar se rota é igual, o que significa que a velocidade da ligação mudou   
+            if(atual.distancia == r.distancia && atual.nodoAnterior.equals(r.nodoAnterior)){
+                //Mesmo que esta rota seja mais lenta temos de trocar
+                this.rotas.put(server,r);
+            }else if(r.delay < atual.delay){ 
+                //Se for uma rota nova apenas a colocamos se for mais rápida
+                this.rotas.put(server, r);
+            }
         }
     }
 
