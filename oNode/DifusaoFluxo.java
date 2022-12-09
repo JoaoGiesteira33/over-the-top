@@ -1,26 +1,21 @@
 package oNode;
 
-import java.util.List;
 import java.net.*;
 import java.io.*;
 
 public class DifusaoFluxo implements Runnable{
     final int intervaloMensagemMS = 5000; //5 segundos entre mensagens
-    
-    Fluxos fluxos;
-    Rotas rotas;
-    List<String> vizinhos;
 
-    public DifusaoFluxo(Fluxos fluxos, Rotas rotas, List<String> vizinhos){
-        this.fluxos = fluxos;
+    Rotas rotas;
+
+    public DifusaoFluxo(Rotas rotas){
         this.rotas = rotas;
-        this.vizinhos = vizinhos;
     }
 
     @Override
     public void run(){
         try{
-            Thread.sleep(2000); //Esperar por construção de rotas
+            Thread.sleep(4000); //Esperar por construção de rotas
 
             while(true){
                 try{

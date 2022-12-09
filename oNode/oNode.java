@@ -32,7 +32,7 @@ public class oNode{
             clienThread.start();
 
             //Cliente para difusão de fluxo
-            DifusaoFluxo df = new DifusaoFluxo(fluxos, rotas, vizinhos);
+            DifusaoFluxo df = new DifusaoFluxo(rotas);
             Thread dfThread = new Thread(df);
             dfThread.start();
         }else if(args.length == 2 && args[0].equals("-s")){ //Server para nodo servidor (streamer de vídeo)
