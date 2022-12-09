@@ -142,21 +142,17 @@ public class ClientHandler implements Runnable{
                         this.fluxos.insereFluxo(ipServidor,senderIP,proximoNodo);
 
                         //Enviar fluxos
-                        System.out.println("HERE IS FINE");
-                        System.out.println("********TABELA DE FLUXOS********");
-                        System.out.println(this.fluxos.toString());
                         for(Fluxo f : this.fluxos.fluxos){
                             if(f.destinos.isEmpty()){ //Já não se quer stream deste servidor, vamos sinalizar
-                                System.out.println("PRE1");
                                 sinalizarFimFluxo(f.origem);
                             }else{
-                                System.out.println("PRE2");
                                 reenviarMensagemFluxo(f.fonte, f.origem);
                             }
                         }
                     }
 
-                    
+                    System.out.println("********TABELA DE FLUXOS********");
+                    System.out.println(this.fluxos.toString());
                 }else if(messageReceived.equals("FLUXO-END")){
                     //Remover IP de onde recebemos esta mensagem da lista de destinos
                     this.fluxos.removeDestino(senderIP);
