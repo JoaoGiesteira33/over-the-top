@@ -75,7 +75,7 @@ public class Encaminhador{
   public static void main(String argv[]) 
   {   
     try{
-        InetAddress ia = InetAddress.getByName("10.0.18.20");//(argv[0]);
+        InetAddress ia = InetAddress.getByName(argv[0]);//("10.0.18.20");
         Encaminhador e = new Encaminhador(ia);
     }
     catch(UnknownHostException e){

@@ -138,6 +138,9 @@ public class Servidor extends JFrame implements ActionListener {
   public static void main(String argv[]) throws Exception
   {
     //get video filename to request:
+    String ipClient="";
+    if(argv.length >= 2 )
+        ipClient=argv[1];
     if (argv.length >= 1 ) {
         VideoFileName = argv[0];
         System.out.println("Servidor: VideoFileName indicado como parametro: " + VideoFileName);
@@ -149,7 +152,7 @@ public class Servidor extends JFrame implements ActionListener {
     File f = new File(VideoFileName);
     if (f.exists()) {
         //Create a Main object 
-        Servidor s = new Servidor(); //Servidor(argv[1]) ip do próximo
+        Servidor s = new Servidor(ipClient); //Servidor(argv[1]) ip do próximo
         //show GUI: (opcional!)
         s.pack();
         s.setVisible(true);
