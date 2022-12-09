@@ -7,20 +7,22 @@ import java.io.*;
 import java.util.List;
 
 public class ClientHandler implements Runnable{
-
+    private static final int MAXIMO_SALTOS = 10;
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
 
     List<String> vizinhos;
     Rotas rotas;
+    Fluxos fluxos;
 
-    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos, Rotas rotas){
+    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos, Rotas rotas, Fluxos fluxos){
         this.s = s;
         this.dataIn = din;
         this.dataOut = dout;
         this.vizinhos = vizinhos;
         this.rotas = rotas;
+        this.fluxos = fluxos;
     }
 
     private void reenviarMensagemMonitorizacao(String vizinho,String ipServidor,int distanciaServidor,long delayAcumulado){
@@ -88,12 +90,16 @@ public class ClientHandler implements Runnable{
                     Rota melhorRota = this.rotas.rotas.get(ipServidor.substring(1));
                     
                     //Enviar melhor rota para restantes vizinhos
-                    for(String vizinho : vizinhosRestantes){
-                        reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
+                    if(distanciaServidor < MAXIMO_SALTOS){
+                        for(String vizinho : vizinhosRestantes){
+                            reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
+                        }
                     }
 
                     System.out.println("------TABELA DE ROTAS------");
                     System.out.println(this.rotas.toString());
+                }else if(messageReceived.equals("FLUXO-C")){
+
                 }else{
                     System.out.println("Mensagem desconhecida. Terminando conexão.");
                     this.s.close();

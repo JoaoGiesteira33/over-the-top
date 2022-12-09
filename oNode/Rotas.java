@@ -10,6 +10,21 @@ public class Rotas {
         this.rotas = new HashMap<>();
     }
 
+    public String servidorMenosDelay(){
+        long min_delay = Long.MAX_VALUE;
+        String min_delay_ip = "";
+        
+        for(Map.Entry<String,Rota> rotaEntry : this.rotas.entrySet()){
+            
+            if(rotaEntry.getValue().delay < min_delay){
+                min_delay = rotaEntry.getValue().delay;
+                min_delay_ip = rotaEntry.getKey();
+            }
+        }
+
+        return min_delay_ip;
+    }
+
     public void insereRota(Rota r, String server){
         //Verificar se já existe alguma rota para este servidor
         if(!this.rotas.containsKey(server)){
