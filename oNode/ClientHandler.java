@@ -95,8 +95,7 @@ public class ClientHandler implements Runnable{
                     System.out.println("Vizinhos: ");
                     System.out.println(this.vizinhos);
                     System.out.println("Received message from: " + senderIP);
-                    System.out.println("Vizinhos filtered");
-                    System.out.println(vizinhosRestantes);
+                    System.out.println("------------------");
                     
                     //Receção da mensagem
                     String ipServidor = dataIn.readUTF();

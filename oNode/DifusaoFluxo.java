@@ -31,6 +31,8 @@ public class DifusaoFluxo implements Runnable{
                     //a que nos desejamos conectar.
                     dataOut.writeUTF("FLUXO");
                     dataOut.writeUTF(melhorServer);
+
+                    System.out.println("Sending request for server: " + melhorServer + " |  Through: " + proximoNodo);
                     
                     dataOut.writeUTF("end");
                     s.close();
