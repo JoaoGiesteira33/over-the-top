@@ -24,6 +24,7 @@ public class Fluxos {
     }
 
     public void removeDestino(String destino){
+        System.out.println("VAI TENTAR REMOVER");
         for(Fluxo f : this.fluxos){
             if(f.destinos.remove(destino))
                 break;
@@ -33,12 +34,11 @@ public class Fluxos {
     public void insereFluxo(String ipServidor,String senderIP, String proximoNodo){
         //Remover destino de outros fluxos que já possam existir
         removeDestino(senderIP);
-
+        System.out.println("Removeu bem!");
         if(!existeFluxo(ipServidor)){
             List<String> newDestinos = new ArrayList<>();
             newDestinos.add(senderIP);
             this.fluxos.add(new Fluxo(ipServidor, proximoNodo, null, false));
-            return;
         }else{ //Adiciona destino à lista de destinos deste servidor
             for(Fluxo f : this.fluxos){
                 if(f.fonte.equals(ipServidor)){
