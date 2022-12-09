@@ -136,11 +136,12 @@ public class ClientHandler implements Runnable{
                         this.fluxos.inserFluxoServer(senderIP);
                     }else{
                         //Descobrir proximo nodo para chegar ao servidor recebido
+                        System.out.println("WAS THERE WAS THERE WAS THERE");
                         String proximoNodo = this.rotas.rotas.get(ipServidor).nodoAnterior;
-                        
+                        System.out.println("WAS HERE WAS HERE WAS HERE");
                         //Atualizacao de tabela de fluxo
                         this.fluxos.insereFluxo(ipServidor,senderIP,proximoNodo);
-                        
+                        System.out.println("123 123 123 123 123 HUEHUE");
                         //Enviar fluxos
                         for(Fluxo f : this.fluxos.fluxos){
                             if(f.destinos.isEmpty()){ //Já não se quer stream deste servidor, vamos sinalizar
