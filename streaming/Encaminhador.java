@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.Timer;
 
 
-public class Encaminhador{
+public class Encaminhador implements Runnable{
     
   //GUI:
   //----------------
@@ -46,10 +46,11 @@ public class Encaminhador{
   //--------------------------
   //Constructor
   //--------------------------
-  public Encaminhador(InetAddress ClientIPAddress){
+  public Encaminhador(InetAddress ClientIPAddress){ //IMPLEMENTAR THREADS NISTO
 
     //init para a parte do cliente
     //--------------------------
+
     cTimer = new Timer(20, new clientTimerListener());
     cTimer.setInitialDelay(1000);
     cTimer.setCoalesce(true);
@@ -57,26 +58,21 @@ public class Encaminhador{
     sBuf = new byte[15000];
     this.ClientIPAddr = ClientIPAddress;
     
-    try {
-        // socket e video
-	      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-        RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
-	      while(true)
-       		cTimer.start();
-          
-    } catch (SocketException e) {
-        System.out.println("Cliente: erro no socket: " + e.getMessage());
-    }
   }
 
   //------------------------------------
   //main: args: 0=ipNext
   //------------------------------------
   public static void main(String argv[]) 
-  {   
+  { 
     try{
-        InetAddress ia = InetAddress.getByName(argv[0]);//("10.0.18.20");
+      for(String s: argv){
+        InetAddress ia = InetAddress.getByName(s);//("10.0.18.20");
         Encaminhador e = new Encaminhador(ia);
+        Thread t = new Thread(e);
+        t.start();
+      }
+        
     }
     catch(UnknownHostException e){
       System.out.println("ERRO: "+e);
@@ -121,6 +117,23 @@ public class Encaminhador{
                 cTimer.stop();
             }
     }
+  }
+
+  @Override
+  public void run() {
+
+    try {
+      System.out.println("In thread "+ Thread.currentThread().getName());
+      // socket e video
+      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
+      RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
+      while(true)
+         cTimer.start();
+        
+    } catch (SocketException e) {
+        System.out.println("Cliente: erro no socket: " + e.getMessage());
+    }
+    
   }
 }
 
