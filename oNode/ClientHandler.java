@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.List;
 
 public class ClientHandler implements Runnable{
-    private static final int MAXIMO_SALTOS = 10;
+    private static final int MAXIMO_SALTOS = 8;
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
@@ -91,11 +91,8 @@ public class ClientHandler implements Runnable{
                     List<String> vizinhosRestantes = new ArrayList<>(vizinhos);
                     vizinhosRestantes.removeIf(v -> v.equals(senderIP));
                     
-                    System.out.println("------------------");
-                    System.out.println("Vizinhos: ");
-                    System.out.println(this.vizinhos);
+                    System.out.println("---------MONITORIZACAO---------");
                     System.out.println("Received message from: " + senderIP);
-                    System.out.println("------------------");
                     
                     //Receção da mensagem
                     String ipServidor = dataIn.readUTF();
@@ -113,13 +110,13 @@ public class ClientHandler implements Runnable{
 
                     //Guardar rota
                     Rota novaRota = new Rota(senderIP, distanciaServidor, newDelay);
-                    this.rotas.insereRota(novaRota, ipServidor.substring(1));
+                    boolean mudouRotas = this.rotas.insereRota(novaRota, ipServidor.substring(1));
 
                     //Obter melhor rota guardada (inserirRota nas rotas pode ter ignorado nova entrada)
                     Rota melhorRota = this.rotas.rotas.get(ipServidor.substring(1));
                     
                     //Enviar melhor rota para restantes vizinhos
-                    if(distanciaServidor < MAXIMO_SALTOS){
+                    if(distanciaServidor < MAXIMO_SALTOS && mudouRotas){
                         for(String vizinho : vizinhosRestantes){
                             reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
                         }

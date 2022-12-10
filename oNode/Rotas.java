@@ -25,10 +25,11 @@ public class Rotas {
         return min_delay_ip;
     }
 
-    public void insereRota(Rota r, String server){
+    public boolean insereRota(Rota r, String server){
         //Verificar se já existe alguma rota para este servidor
         if(!this.rotas.containsKey(server)){
             this.rotas.put(server, r);
+            return true;
         }else{
             //Obter rota atual para o servidor dado
             Rota atual = this.rotas.get(server);
@@ -37,11 +38,15 @@ public class Rotas {
             if(atual.distancia == r.distancia && atual.nodoAnterior.equals(r.nodoAnterior)){
                 //Mesmo que esta rota seja mais lenta temos de trocar
                 this.rotas.put(server,r);
-            }else if(r.delay < atual.delay){ 
+                return true;
+            }else if(r.delay < atual.delay){
                 //Se for uma rota nova apenas a colocamos se for mais rápida
                 this.rotas.put(server, r);
+                return true;
             }
         }
+
+        return false;
     }
 
     @Override
