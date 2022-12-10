@@ -42,6 +42,7 @@ public class Encaminhador implements Runnable{
 
   Timer cTimer; //timer used to receive data from the UDP socket
   byte[] cBuf; //buffer used to store data received from the server 
+  boolean first=true;
 
   //--------------------------
   //Constructor
@@ -57,6 +58,17 @@ public class Encaminhador implements Runnable{
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
     sBuf = new byte[15000];
     this.ClientIPAddr = ClientIPAddress;
+    try{
+      if(first){
+        // socket e video
+        RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
+        RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
+        first = false;
+      }
+
+    }catch(SocketException se){
+      System.out.println("Erro ao receber: "+se.getMessage());
+    }
     
   }
 
@@ -124,14 +136,11 @@ public class Encaminhador implements Runnable{
 
     try {
       System.out.println("In thread "+ Thread.currentThread().getName());
-      // socket e video
-      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-      RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
       while(true)
          cTimer.start();
         
-    } catch (SocketException e) {
-        System.out.println("Cliente: erro no socket: " + e.getMessage());
+    } catch (Exception e) {
+        System.out.println("Erro: " + e.getMessage());
     }
     
   }
