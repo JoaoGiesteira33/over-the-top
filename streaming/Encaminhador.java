@@ -3,12 +3,17 @@ package streaming;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
 
-public class Encaminhador implements Runnable{
+
+public class Encaminhador {//implements Runnable{
+
+  List<InetAddress> ia_list;
     
   //GUI:
   //----------------
@@ -47,7 +52,7 @@ public class Encaminhador implements Runnable{
   //--------------------------
   //Constructor
   //--------------------------
-  public Encaminhador(InetAddress ClientIPAddress){ //IMPLEMENTAR THREADS NISTO
+  public Encaminhador(List<InetAddress> ia_list){ //IMPLEMENTAR THREADS NISTO
 
     //init para a parte do cliente
     //--------------------------
@@ -57,14 +62,13 @@ public class Encaminhador implements Runnable{
     cTimer.setCoalesce(true);
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
     sBuf = new byte[15000];
-    this.ClientIPAddr = ClientIPAddress;
+    this.ia_list=ia_list;
     try{
-      if(first){
-        // socket e video
-        RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-        RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
-        first = false;
-      }
+      // socket e video
+      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
+      RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
+      while(true)
+        cTimer.start();
 
     }catch(SocketException se){
       System.out.println("Erro ao receber: "+se.getMessage());
@@ -73,17 +77,19 @@ public class Encaminhador implements Runnable{
   }
 
   //------------------------------------
-  //main: args: 0=ipNext
+  //main: args: Ips dos clientes
   //------------------------------------
   public static void main(String argv[]) 
-  { 
+  {  
+    List<InetAddress> ia_list= new ArrayList<>();
     try{
       for(String s: argv){
         InetAddress ia = InetAddress.getByName(s);//("10.0.18.20");
-        Encaminhador e = new Encaminhador(ia);
-        Thread t = new Thread(e);
-        t.start();
+        ia_list.add(ia);
+        //Thread t = new Thread(e);
+        //t.start();
       }
+      Encaminhador e = new Encaminhador(ia_list);
         
     }
     catch(UnknownHostException e){
@@ -98,51 +104,50 @@ public class Encaminhador implements Runnable{
   class clientTimerListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Datagram packet to store received packet
-        rcvdp = new DatagramPacket(cBuf, cBuf.length);
+      //Datagram packet to store received packet
+      rcvdp = new DatagramPacket(cBuf, cBuf.length);
 
-        if(imagenb < VIDEO_LENGTH){
+      if(imagenb < VIDEO_LENGTH){
+        try{
+	          //receive the DP from the socket:
+	          RTPsocket_in.receive(rcvdp);
+		        imagenb++;
 
-            imagenb++;
-            try{
-                
-	              //receive the DP from the socket:
-	              RTPsocket_in.receive(rcvdp);
-		            
-                //Change Received packet destination to the client IP and Port
-		            rcvdp.setAddress(ClientIPAddr);
-		            rcvdp.setPort(RTP_RCV_PORT);
-	              
-                RTPsocket_out = new DatagramSocket();
-                RTPsocket_out.send(rcvdp);
-                System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
+            //Received IPs in command line, starts a thread for each
+            for(InetAddress ia: ia_list){
+              Thread t = new Thread(){
+                @Override
+                public void run() {
+                  //Update packet destination
+                  rcvdp.setAddress(ia);
+                  rcvdp.setPort(RTP_RCV_PORT);
 
-              }catch (InterruptedIOException iioe){
-              
-	              System.out.println("Nothing to read");
-              
-              }catch (Exception ioe) {
-	              System.out.println("Exception caught: "+ioe);
-              }
-        
-            }else{
-                cTimer.stop();
+                  //Send Packet
+                  try{
+                    RTPsocket_out = new DatagramSocket();
+                    RTPsocket_out.send(rcvdp);
+                    System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
+                  }
+                  catch(IOException e){
+                    System.out.println("Erro: " + e.getMessage());
+                  }
+                }
+              };
+              t.start();
             }
-    }
-  }
-
-  @Override
-  public void run() {
-
-    try {
-      System.out.println("In thread "+ Thread.currentThread().getName());
-      while(true)
-         cTimer.start();
+            //Change Received packet destination to the client IP and Port
+		        
+        }catch (InterruptedIOException iioe){
         
-    } catch (Exception e) {
-        System.out.println("Erro: " + e.getMessage());
+	        System.out.println("Nothing to read");
+        
+        }catch (Exception ioe) {
+	        System.out.println("Exception caught: "+ioe);
+        } 
+      }else{
+          cTimer.stop();
+      }
     }
-    
   }
 }
 
