@@ -43,6 +43,7 @@ public class Fluxos {
                 if(f.fonte.equals(ipServidor)){
                     f.destinos.add(senderIP);
                     f.origem = proximoNodo; //Atualizar origem, pode ter mudado desde inicio de programa
+                    f.destinos.remove(proximoNodo); //Remover origem da lista de destinos
                     break;
                 }
             }
