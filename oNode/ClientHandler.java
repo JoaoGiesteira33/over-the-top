@@ -83,7 +83,7 @@ public class ClientHandler implements Runnable{
                 messageReceived = this.dataIn.readUTF();
 
                 if(messageReceived.equals("end")){
-                    System.out.println("Closing connection to " + this.s);
+                    //System.out.println("Closing connection to " + this.s);
                     this.s.close();
                     break;
                 }else if(messageReceived.equals("MONITORIZACAO")){
@@ -142,7 +142,7 @@ public class ClientHandler implements Runnable{
                         if(oldNode != ""){
                             sinalizarFimFluxo(oldNode);
                         }
-                        
+
                         //Enviar fluxos
                         for(Fluxo f : this.fluxos.fluxos){
                             if(f.destinos.isEmpty()){ //Já não se quer stream deste servidor, vamos sinalizar
