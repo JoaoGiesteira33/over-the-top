@@ -55,7 +55,7 @@ public class Servidor extends JFrame implements ActionListener {
     //init Frame
     super("Servidor");
 
-
+    ia_list=new ArrayList<>();
     // init para a parte do servidor
     sTimer = new Timer(FRAME_PERIOD, this); //init Timer para servidor
     sTimer.setInitialDelay(0);
