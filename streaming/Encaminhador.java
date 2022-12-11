@@ -77,11 +77,10 @@ public class Encaminhador {//implements Runnable{
   }
 
   //------------------------------------
-  //main: args: 0=ipNext
+  //main: args: Ips dos clientes
   //------------------------------------
   public static void main(String argv[]) 
   {  
-
     List<InetAddress> ia_list= new ArrayList<>();
     try{
       for(String s: argv){
@@ -105,66 +104,50 @@ public class Encaminhador {//implements Runnable{
   class clientTimerListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Datagram packet to store received packet
-        rcvdp = new DatagramPacket(cBuf, cBuf.length);
+      //Datagram packet to store received packet
+      rcvdp = new DatagramPacket(cBuf, cBuf.length);
 
-        if(imagenb < VIDEO_LENGTH){
+      if(imagenb < VIDEO_LENGTH){
+        try{
+	          //receive the DP from the socket:
+	          RTPsocket_in.receive(rcvdp);
+		        imagenb++;
 
-            
-            try{
-	              //receive the DP from the socket:
-	              RTPsocket_in.receive(rcvdp);
-		            imagenb++;
+            //Received IPs in command line, starts a thread for each
+            for(InetAddress ia: ia_list){
+              Thread t = new Thread(){
+                @Override
+                public void run() {
+                  //Update packet destination
+                  rcvdp.setAddress(ia);
+                  rcvdp.setPort(RTP_RCV_PORT);
 
-                for(InetAddress ia: ia_list){
-                  Thread t = new Thread(){
-                      @Override
-                      public void run() {
-                        rcvdp.setAddress(ia);
-                        rcvdp.setPort(RTP_RCV_PORT);
-                        try{
-                          RTPsocket_out = new DatagramSocket();
-                          RTPsocket_out.send(rcvdp);
-                          System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
-                        }
-                        catch(IOException e){
-                          System.out.println("Erro: " + e.getMessage());
-                        }
-                      }
-                  };
-                  t.start();
+                  //Send Packet
+                  try{
+                    RTPsocket_out = new DatagramSocket();
+                    RTPsocket_out.send(rcvdp);
+                    System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
+                  }
+                  catch(IOException e){
+                    System.out.println("Erro: " + e.getMessage());
+                  }
                 }
-                //Change Received packet destination to the client IP and Port
-		            
-
-              }catch (InterruptedIOException iioe){
-              
-	              System.out.println("Nothing to read");
-              
-              }catch (Exception ioe) {
-	              System.out.println("Exception caught: "+ioe);
-              }
-        
-            }else{
-                cTimer.stop();
+              };
+              t.start();
             }
+            //Change Received packet destination to the client IP and Port
+		        
+        }catch (InterruptedIOException iioe){
+        
+	        System.out.println("Nothing to read");
+        
+        }catch (Exception ioe) {
+	        System.out.println("Exception caught: "+ioe);
+        } 
+      }else{
+          cTimer.stop();
+      }
     }
   }
-
-  /* 
-  @Override
-  public void run() {
-
-    try {
-      System.out.println("In thread "+ Thread.currentThread().getName());
-      while(true)
-         cTimer.start();
-        
-    } catch (Exception e) {
-        System.out.println("Erro: " + e.getMessage());
-    }
-    
-  }*/
-
 }
 
