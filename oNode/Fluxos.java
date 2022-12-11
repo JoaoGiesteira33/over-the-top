@@ -30,9 +30,11 @@ public class Fluxos {
         }
     }
 
-    public void insereFluxo(String ipServidor,String senderIP, String proximoNodo){
+    public String insereFluxo(String ipServidor,String senderIP, String proximoNodo){
         //Remover destino de outros fluxos que já possam existir
         removeDestino(senderIP);
+
+        String returnValue = "";
 
         if(!existeFluxo(ipServidor)){
             List<String> newDestinos = new ArrayList<>();
@@ -42,12 +44,19 @@ public class Fluxos {
             for(Fluxo f : this.fluxos){
                 if(f.fonte.equals(ipServidor)){
                     f.destinos.add(senderIP);
-                    f.origem = proximoNodo; //Atualizar origem, pode ter mudado desde inicio de programa
+                    //Se mudarmos o nodo de onde vem o fluxo, guardamos o antigo para de seguida
+                    //sinalizar-lhe o fim do fluxo
+                    if(!f.origem.equals(proximoNodo)){
+                        returnValue = f.origem;
+                        f.origem = proximoNodo; 
+                    }
                     f.destinos.remove(proximoNodo); //Remover origem da lista de destinos
                     break;
                 }
             }
         }
+
+        return returnValue;
     }
 
     public void inserFluxoServer(String senderIP){

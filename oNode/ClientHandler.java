@@ -136,8 +136,13 @@ public class ClientHandler implements Runnable{
                         String proximoNodo = this.rotas.rotas.get(ipServidor).nodoAnterior;
 
                         //Atualizacao de tabela de fluxo
-                        this.fluxos.insereFluxo(ipServidor,senderIP,proximoNodo);
+                        String oldNode = this.fluxos.insereFluxo(ipServidor,senderIP,proximoNodo);
 
+                        //Verificamos se é necessário avisar o nodo anterior que já não queremos receber fluxo dele
+                        if(oldNode != ""){
+                            sinalizarFimFluxo(oldNode);
+                        }
+                        
                         //Enviar fluxos
                         for(Fluxo f : this.fluxos.fluxos){
                             if(f.destinos.isEmpty()){ //Já não se quer stream deste servidor, vamos sinalizar
