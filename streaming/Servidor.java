@@ -302,7 +302,7 @@ public class Servidor extends JFrame implements ActionListener {
                   
                     senddp = new DatagramPacket(packet_bits, packet_length, ia, RTP_dest_port);
                     RTPsocket.send(senddp);
-                    System.out.println("Send frame #"+imagenb);
+                    //System.out.println("Send frame #"+imagenb);
                   
                   } catch (IOException e) {
                     System.out.println("Erro ao enviar: "+e.getMessage());
