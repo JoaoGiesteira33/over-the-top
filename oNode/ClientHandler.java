@@ -124,7 +124,7 @@ public class ClientHandler implements Runnable{
                     Rota melhorRota = this.rotas.rotas.get(ipServidor.substring(1));
                     
                     //Enviar melhor rota para restantes vizinhos
-                    if(distanciaServidor < MAXIMO_SALTOS && mudouRotas){
+                    if(melhorRota.distancia < MAXIMO_SALTOS && mudouRotas){
                         for(String vizinho : vizinhosRestantes){
                             reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
                         }
