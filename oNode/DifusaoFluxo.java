@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 
 public class DifusaoFluxo implements Runnable{
-    final int intervaloMensagemMS = 3000; //3 segundos entre mensagens
+    final int intervaloMensagemMS = 6000; //6 segundos entre mensagens
 
     Rotas rotas;
 
@@ -15,7 +15,7 @@ public class DifusaoFluxo implements Runnable{
     @Override
     public void run(){
         try{
-            Thread.sleep(4000); //Esperar por construção de rotas
+            Thread.sleep(5000); //Esperar por construção de rotas
 
             while(true){
                 try{

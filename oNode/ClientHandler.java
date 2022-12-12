@@ -106,7 +106,6 @@ public class ClientHandler implements Runnable{
                     long newDelay = delay + delayAcumulado;
 
                     System.out.println("Server: " + ipServidor + " | Distancia: " + distanciaServidor + " | Delay Total: " + newDelay + "ms" + " | Delay: " + delay + "ms");
-                    System.out.println("-------------------");
 
                     //Guardar rota
                     Rota novaRota = new Rota(senderIP, distanciaServidor, newDelay);
