@@ -40,6 +40,7 @@ public class oNode{
             Thread dfThread = new Thread(df);
             dfThread.start();
 
+            //Cliente
             Cliente cliente = new Cliente();
         }else if(args.length == 2 && args[0].equals("-s")){ //Server para nodo servidor (streamer de vídeo)
             String bootstrapper = args[1];
