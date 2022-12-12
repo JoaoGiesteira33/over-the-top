@@ -7,7 +7,7 @@ import java.io.*;
 
 public class StreamerMonitorizacaoRede implements Runnable{
     List<String> vizinhos;
-    final int intervaloMensagemMS = 5000; //5 segundos entre mensagens
+    final int intervaloMensagemMS = 3000; //3 segundos entre mensagens
 
     public StreamerMonitorizacaoRede(List<String> vizinhos){
         this.vizinhos = vizinhos;
