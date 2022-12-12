@@ -25,6 +25,7 @@ public class Cliente {
   JPanel buttonPanel = new JPanel();
   JLabel iconLabel = new JLabel();
   ImageIcon icon;
+  int imagenb;
 
 
   //RTP variables:
@@ -82,6 +83,7 @@ public class Cliente {
     cTimer.setInitialDelay(0);
     cTimer.setCoalesce(true);
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
+    imagenb=0;
 
     try {
     // socket e video
@@ -150,6 +152,7 @@ public class Cliente {
       //Construct a DatagramPacket to receive data from the UDP socket
       rcvdp = new DatagramPacket(cBuf, cBuf.length);
 	
+      
 
       try{
 //	       System.out.println(Inet4Address.getLocalHost().getHostAddress());
@@ -159,25 +162,32 @@ public class Cliente {
 
 	        //create an RTPpacket object from the DP
 	        RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
+          
+          /* 
+          if(imagenb==500)
+            imagenb=0;
+          */
+          //if(imagenb <   rtp_packet.getsequencenumber()){
+          //  imagenb++;
+	          //print important header fields of the RTP packet received: 
+	          //System.out.println("Got RTP packet with SeqNum # "+rtp_packet.getsequencenumber()+" TimeStamp "+rtp_packet.gettimestamp()+" ms, of type "+rtp_packet.getpayloadtype());
 
-	        //print important header fields of the RTP packet received: 
-	        //System.out.println("Got RTP packet with SeqNum # "+rtp_packet.getsequencenumber()+" TimeStamp "+rtp_packet.gettimestamp()+" ms, of type "+rtp_packet.getpayloadtype());
+	          //print header bitstream:
+	          //rtp_packet.printheader();
 
-	        //print header bitstream:
-	        //rtp_packet.printheader();
+	          //get the payload bitstream from the RTPpacket object
+	          int payload_length = rtp_packet.getpayload_length();
+	          byte [] payload = new byte[payload_length];
+	          rtp_packet.getpayload(payload);
 
-	        //get the payload bitstream from the RTPpacket object
-	        int payload_length = rtp_packet.getpayload_length();
-	        byte [] payload = new byte[payload_length];
-	        rtp_packet.getpayload(payload);
+	          //get an Image object from the payload bitstream
+	          Toolkit toolkit = Toolkit.getDefaultToolkit();
+	          Image image = toolkit.createImage(payload, 0, payload_length);
 
-	        //get an Image object from the payload bitstream
-	        Toolkit toolkit = Toolkit.getDefaultToolkit();
-	        Image image = toolkit.createImage(payload, 0, payload_length);
-
-	        //display the image as an ImageIcon object
-	        icon = new ImageIcon(image);
-	        iconLabel.setIcon(icon);
+	          //display the image as an ImageIcon object
+	          icon = new ImageIcon(image);
+	          iconLabel.setIcon(icon);
+          //}
       }
       catch (InterruptedIOException iioe){
 	        System.out.println("Nothing to read");
