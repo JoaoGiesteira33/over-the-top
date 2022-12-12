@@ -48,7 +48,6 @@ public class BootstrapperServer implements Runnable{
 
             while(true){
                 Socket clientSocket = s.accept();
-                System.out.println("Nova conexão: " + clientSocket);
 
                 DataInputStream dataIn = new DataInputStream(clientSocket.getInputStream());
 				DataOutputStream dataOut = new DataOutputStream(clientSocket.getOutputStream());
