@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Fluxos {
-    List<Fluxo> fluxos;
+    public List<Fluxo> fluxos;
 
     public Fluxos(){
         this.fluxos = new ArrayList<>();

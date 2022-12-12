@@ -9,7 +9,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-
+import oNode.Fluxo;
+import oNode.Fluxos;
 
 public class Encaminhador {//implements Runnable{
 
@@ -52,6 +53,35 @@ public class Encaminhador {//implements Runnable{
   //--------------------------
   //Constructor
   //--------------------------
+  public Encaminhador(Fluxos fluxos){ //IMPLEMENTAR THREADS NISTO
+
+    //init para a parte do cliente
+    //--------------------------
+    this.ia_list=new ArrayList<>();
+
+    cTimer = new Timer(20, new clientTimerListener());
+    cTimer.setInitialDelay(1000);
+    cTimer.setCoalesce(true);
+    cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
+    sBuf = new byte[15000];
+    try{
+      // socket e video
+      RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
+      RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
+      for(Fluxo f : fluxos.fluxos){
+        for(String s: f.destinos)
+        this.ia_list.add(InetAddress.getByName(s));
+      }
+
+      while(true)
+        cTimer.start();
+
+    }catch(Exception e){
+      System.out.println("Erro: "+e.getMessage());
+    }
+    
+  }
+
   public Encaminhador(List<String> ia_list){ //IMPLEMENTAR THREADS NISTO
 
     //init para a parte do cliente

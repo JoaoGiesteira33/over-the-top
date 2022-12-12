@@ -5,7 +5,7 @@ import java.util.List;
 public class Fluxo {
     String fonte;
     String origem;
-    List<String> destinos;
+    public List<String> destinos;
     boolean ativo;
 
     public Fluxo(String fonte, String origem, List<String> destinos, boolean ativo){

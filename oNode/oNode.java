@@ -3,6 +3,10 @@ package oNode;
 import java.util.ArrayList;
 import java.util.List;
 
+import streaming.Cliente;
+import streaming.Encaminhador;
+import streaming.Servidor;
+
 // Default ports da aplicação oNode
 // Bootstrapper -> 8080
 // Server Default -> 8090
@@ -35,6 +39,8 @@ public class oNode{
             DifusaoFluxo df = new DifusaoFluxo(rotas);
             Thread dfThread = new Thread(df);
             dfThread.start();
+
+            Cliente cliente = new Cliente();
         }else if(args.length == 2 && args[0].equals("-s")){ //Server para nodo servidor (streamer de vídeo)
             String bootstrapper = args[1];
 
@@ -53,6 +59,10 @@ public class oNode{
             Thread smrThread = new Thread(smr);
             smrThread.start();
 
+            //Servidor
+            Servidor servidor = new Servidor(fluxos);
+            servidor.pack();
+            servidor.setVisible(true);
         }else if(args.length == 1){ //Server para nodos restantes
             String bootstrapper = args[0];
 
@@ -65,6 +75,9 @@ public class oNode{
             EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos);
             Thread clientThread = new Thread(c);
             clientThread.start();
+
+            //Encaminhador
+            Encaminhador encaminhador = new Encaminhador(fluxos);
         }else{
             System.out.println("Normal Node: oNode.java <bootstrapper_ip>");
             System.out.println("Bootstrapper Node: oNode.java -b <config_file>");

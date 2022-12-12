@@ -14,6 +14,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
+import oNode.Fluxos;
+import oNode.Fluxo;
 /*
 Perguntas:
   1: RTP funciona sobre UDP normalmamente, mas podemos usar com TCP ? Temos que fazer alterações ?
@@ -34,7 +36,7 @@ public class Servidor extends JFrame implements ActionListener {
   int RTP_dest_port = 25000; //destination port for RTP packets 
   InetAddress ClientIPAddr; //Client IP address
   
-  static String VideoFileName; //video file to request to the server
+  static String VideoFileName = "movie.Mjpeg"; //video file to request to the server
 
   //Video constants:
   //------------------
@@ -50,6 +52,52 @@ public class Servidor extends JFrame implements ActionListener {
   //--------------------------
   //Constructor
   //--------------------------
+  public Servidor(Fluxos fluxos){
+    //init Frame
+    super("Servidor");
+
+    ia_list=new ArrayList<>();
+    // init para a parte do servidor
+    sTimer = new Timer(FRAME_PERIOD, this); //init Timer para servidor
+    sTimer.setInitialDelay(0);
+    sTimer.setCoalesce(true);
+    sBuf = new byte[15000]; //allocate memory for the sending buffer
+
+    try {
+	      RTPsocket = new DatagramSocket(); //init RTP socket 
+        //ClientIPAddr = InetAddress.getByName(nextIp);
+        //System.out.println("Servidor: socket " + ClientIPAddr);
+	      video = new VideoStream(VideoFileName); //init the VideoStream object:
+        System.out.println("Servidor: vai enviar video da file " + VideoFileName);
+
+        for(Fluxo f : fluxos.fluxos){
+          for(String s: f.destinos)
+          ia_list.add(InetAddress.getByName(s));
+        }
+
+    } catch (SocketException e) {
+        System.out.println("Servidor: erro no socket: " + e.getMessage());
+    } catch (Exception e) {
+        System.out.println("Servidor: erro no video: " + e.getMessage());
+    }
+
+    //Handler to close the main window
+    addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+	    //stop the timer and exit
+	      sTimer.stop();
+	      System.exit(0);
+      }
+    });
+
+    //GUI:
+    String descricao = "Send frame #" + imagenb;
+    label = new JLabel(descricao, JLabel.CENTER);
+    getContentPane().add(label, BorderLayout.CENTER);
+          
+    sTimer.start();
+  }
+
   public Servidor(List<String> nextIPs) {
 
     //init Frame
