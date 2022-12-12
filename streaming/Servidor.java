@@ -329,7 +329,7 @@ public class Servidor extends JFrame implements ActionListener {
 	        //if we have reached the end of the video file, stop the timer
 	       
 	        //if we have reached the end of the video file, stop the timer
-	        //sTimer.restart();
+	        sTimer.restart();
           imagenb=0;
           try {
             video = new VideoStream(VideoFileName);
