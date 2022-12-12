@@ -185,7 +185,7 @@ public class Servidor extends JFrame implements ActionListener {
   //------------------------------------
   //main -> args: 0=VideoFileName, 1=Ip do proximo
   //------------------------------------
-  public static void main(String argv[]) throws Exception
+  public static void main(String argv[])
   {
     //get video filename to request:
     List<String> ipClients = new ArrayList<>();
