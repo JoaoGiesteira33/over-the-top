@@ -14,6 +14,7 @@ import oNode.Fluxos;
 
 public class Encaminhador {//implements Runnable{
 
+  Fluxos fluxos;
   List<InetAddress> ia_list;
     
   //GUI:
@@ -55,6 +56,7 @@ public class Encaminhador {//implements Runnable{
   //--------------------------
   public Encaminhador(Fluxos fluxos){ //IMPLEMENTAR THREADS NISTO
 
+    this.fluxos = fluxos;
     //init para a parte do cliente
     //--------------------------
     this.ia_list=new ArrayList<>();
@@ -68,10 +70,10 @@ public class Encaminhador {//implements Runnable{
       // socket e video
       RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
       RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
-      for(Fluxo f : fluxos.fluxos){
+      /*for(Fluxo f : fluxos.fluxos){
         for(String s: f.destinos)
         this.ia_list.add(InetAddress.getByName(s));
-      }
+      }*/
 
       while(true)
         cTimer.start();
@@ -138,29 +140,31 @@ public class Encaminhador {//implements Runnable{
 		        imagenb++;
 
             //Received IPs in command line, starts a thread for each
-            for(InetAddress ia: ia_list){
-              Thread t = new Thread(){
-                @Override
-                public void run() {
-                  //Update packet destination
-                  rcvdp.setAddress(ia);
-                  rcvdp.setPort(RTP_RCV_PORT);
+            for(Fluxo f: fluxos.fluxos){  
+              for(String s: f.destinos){
+                InetAddress ia = InetAddress.getByName(s);
+                Thread t = new Thread(){
+                  @Override
+                  public void run() {
+                    //Update packet destination
+                    rcvdp.setAddress(ia);
+                    rcvdp.setPort(RTP_RCV_PORT);
 
-                  //Send Packet
-                  try{
-                    RTPsocket_out = new DatagramSocket();
-                    RTPsocket_out.send(rcvdp);
-                    System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
+                    //Send Packet
+                    try{
+                      RTPsocket_out = new DatagramSocket();
+                      RTPsocket_out.send(rcvdp);
+                      System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
+                    }
+                    catch(IOException e){
+                      System.out.println("Erro: " + e.getMessage());
+                    }
                   }
-                  catch(IOException e){
-                    System.out.println("Erro: " + e.getMessage());
-                  }
-                }
-              };
-              t.start();
+                };
+                t.start();
+              }
+              //Change Received packet destination to the client IP and Port
             }
-            //Change Received packet destination to the client IP and Port
-		        
         }catch (InterruptedIOException iioe){
         
 	        System.out.println("Nothing to read");

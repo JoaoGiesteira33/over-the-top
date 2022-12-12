@@ -23,7 +23,7 @@ Perguntas:
 */
 public class Servidor extends JFrame implements ActionListener {
 
-
+  public Fluxos fluxos; 
   List<InetAddress> ia_list;
   //GUI:
   //----------------
@@ -56,7 +56,8 @@ public class Servidor extends JFrame implements ActionListener {
     //init Frame
     super("Servidor");
 
-    ia_list=new ArrayList<>();
+    this.fluxos=fluxos;
+    //ia_list=new ArrayList<>();
     // init para a parte do servidor
     sTimer = new Timer(FRAME_PERIOD, this); //init Timer para servidor
     sTimer.setInitialDelay(0);
@@ -70,10 +71,10 @@ public class Servidor extends JFrame implements ActionListener {
 	      video = new VideoStream(VideoFileName); //init the VideoStream object:
         System.out.println("Servidor: vai enviar video da file " + VideoFileName);
 
-        for(Fluxo f : fluxos.fluxos){
+        /*for(Fluxo f : fluxos.fluxos){
           for(String s: f.destinos)
           ia_list.add(InetAddress.getByName(s));
-        }
+        }*/
 
     } catch (SocketException e) {
         System.out.println("Servidor: erro no socket: " + e.getMessage());
@@ -291,22 +292,25 @@ public class Servidor extends JFrame implements ActionListener {
         
 	        //send the packet as a DatagramPacket over the UDP socket 
           
-          for(InetAddress ia: ia_list){
-            Thread t = new Thread(){
-              @Override
-              public void run(){
-	              try {
-
-                  senddp = new DatagramPacket(packet_bits, packet_length, ia, RTP_dest_port);
-                  RTPsocket.send(senddp);
-                  System.out.println("Send frame #"+imagenb);
-
-                } catch (IOException e) {
-                  System.out.println("Erro ao enviar: "+e.getMessage());
+          for(Fluxo f: fluxos.fluxos){
+            for(String s: f.destinos){
+              InetAddress ia = InetAddress.getByName(s);
+              Thread t = new Thread(){
+                @Override
+                public void run(){
+	                try {
+                  
+                    senddp = new DatagramPacket(packet_bits, packet_length, ia, RTP_dest_port);
+                    RTPsocket.send(senddp);
+                    System.out.println("Send frame #"+imagenb);
+                  
+                  } catch (IOException e) {
+                    System.out.println("Erro ao enviar: "+e.getMessage());
+                  }
                 }
-              }
-            };
-            t.start();
+              };
+              t.start();
+            }
           }
 	        //print the header bitstream
 	        rtp_packet.printheader();
