@@ -16,6 +16,15 @@ public class ClientHandler implements Runnable{
     Rotas rotas;
     Fluxos fluxos;
 
+    private void printInfo(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        System.out.println("------TABELA DE ROTAS------");
+        System.out.println(this.rotas.toString());
+        System.out.println("********TABELA DE FLUXOS********");
+        System.out.println(this.fluxos.toString());
+    }
+
     public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos, Rotas rotas, Fluxos fluxos){
         this.s = s;
         this.dataIn = din;
@@ -120,9 +129,9 @@ public class ClientHandler implements Runnable{
                             reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
                         }
                     }
-
-                    System.out.println("------TABELA DE ROTAS------");
-                    System.out.println(this.rotas.toString());
+                    printInfo();
+                    //System.out.println("------TABELA DE ROTAS------");
+                    //System.out.println(this.rotas.toString());
                 }else if(messageReceived.equals("FLUXO")){
                     //Servidor de onde vamos receber a stream
                     String ipServidor = dataIn.readUTF();
@@ -151,15 +160,15 @@ public class ClientHandler implements Runnable{
                             }
                         }
                     }
-
-                    System.out.println("********TABELA DE FLUXOS********");
-                    System.out.println(this.fluxos.toString());
+                    printInfo();
+                    //System.out.println("********TABELA DE FLUXOS********");
+                    //System.out.println(this.fluxos.toString());
                 }else if(messageReceived.equals("FLUXO-END")){
                     //Remover IP de onde recebemos esta mensagem da lista de destinos
                     this.fluxos.removeDestino(senderIP);
-
-                    System.out.println("********TABELA DE FLUXOS********");
-                    System.out.println(this.fluxos.toString());
+                    printInfo();
+                    //System.out.println("********TABELA DE FLUXOS********");
+                    //System.out.println(this.fluxos.toString());
                 }else{
                     System.out.println("Mensagem desconhecida. Terminando conexão.");
                     this.s.close();
