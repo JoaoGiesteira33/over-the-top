@@ -125,11 +125,12 @@ public class ClientHandler implements Runnable{
                     
                     //Enviar melhor rota para restantes vizinhos
                     if(melhorRota.distancia < MAXIMO_SALTOS && mudouRotas){
+                        printInfo();
                         for(String vizinho : vizinhosRestantes){
                             reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);
                         }
                     }
-                    printInfo();
+                    
                     //System.out.println("------TABELA DE ROTAS------");
                     //System.out.println(this.rotas.toString());
                 }else if(messageReceived.equals("FLUXO")){
