@@ -36,7 +36,7 @@ public class Servidor extends JFrame implements ActionListener {
   int RTP_dest_port = 25000; //destination port for RTP packets 
   InetAddress ClientIPAddr; //Client IP address
   
-  static String VideoFileName = "./movie.Mjpeg"; //video file to request to the server
+  static String VideoFileName = "movie.Mjpeg"; //video file to request to the server
 
   //Video constants:
   //------------------
@@ -324,11 +324,19 @@ public class Servidor extends JFrame implements ActionListener {
 	          System.exit(0);
 	        }
       }
-    else
+      else
       {
 	        //if we have reached the end of the video file, stop the timer
-	        sTimer.stop();
+	       
+	        //if we have reached the end of the video file, stop the timer
+	        //sTimer.restart();
+          imagenb=0;
+          try {
+            video = new VideoStream(VideoFileName);
+          } catch (Exception e1) {
+            System.out.println("Servidor: erro no video: " + e1.getMessage());
+          }
       }
-  }
+    }
 
 }//end of Class Servidor
