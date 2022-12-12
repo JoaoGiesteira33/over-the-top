@@ -175,11 +175,6 @@ public class Encaminhador {//implements Runnable{
       }else{
           cTimer.restart();
           imagenb=0;
-          try {
-            video = new VideoStream(VideoFileName);
-          } catch (Exception e1) {
-            System.out.println("Servidor: erro no video: " + e1.getMessage());
-          }
       }
     }
   }
