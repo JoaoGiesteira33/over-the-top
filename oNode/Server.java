@@ -8,12 +8,14 @@ public class Server implements Runnable{
     final int PORT = 8090;
     List<String> vizinhos; 
     Rotas rotas;
+    Integer numeroNos;
     Fluxos fluxos;
 
-    public Server(List<String> vizinhos, Rotas rotas, Fluxos fluxos){
+    public Server(List<String> vizinhos, Rotas rotas, Fluxos fluxos, Integer numeroNos){
         this.vizinhos = vizinhos;
         this.rotas = rotas;
         this.fluxos = fluxos;
+        this.numeroNos = numeroNos;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class Server implements Runnable{
 				DataOutputStream dataOut = new DataOutputStream(clientSocket.getOutputStream());
 
                 //New thread for new connection
-                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut,vizinhos,rotas,fluxos);
+                ClientHandler ch = new ClientHandler(clientSocket,dataIn,dataOut,vizinhos,rotas,fluxos,numeroNos);
                 Thread t = new Thread(ch);
                 t.start();
             }

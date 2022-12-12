@@ -12,6 +12,7 @@ import streaming.Servidor;
 // Server Default -> 8090
 public class oNode{
     public static void main(String[] args){
+        Integer numeroNos = 33;
         List<String> vizinhos = new ArrayList<>();
         Rotas rotas = new Rotas();
         Fluxos fluxos = new Fluxos();
@@ -26,12 +27,12 @@ public class oNode{
             String bootstrapper = args[1];
 
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server(vizinhos,rotas,fluxos);
+            Server s = new Server(vizinhos,rotas,fluxos,numeroNos);
             Thread sThread = new Thread(s);
             sThread.start();
 
             //Cliente para conseguir establece ligação ao bootstrapper
-            EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos);
+            EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos,numeroNos);
             Thread clienThread = new Thread(c);
             clienThread.start();
 
@@ -46,12 +47,12 @@ public class oNode{
             String bootstrapper = args[1];
 
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server(vizinhos,rotas, fluxos);
+            Server s = new Server(vizinhos,rotas, fluxos, numeroNos);
             Thread sThread = new Thread(s);
             sThread.start();
 
             //Cliente para conseguir establece ligação ao bootstrapper
-            EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos);
+            EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos,numeroNos);
             Thread clienThread = new Thread(c);
             clienThread.start();
 
@@ -68,12 +69,12 @@ public class oNode{
             String bootstrapper = args[0];
 
             //Server default para conseguir receber qualquer mensagem necessária
-            Server s = new Server(vizinhos, rotas, fluxos);
+            Server s = new Server(vizinhos, rotas, fluxos,numeroNos);
             Thread sThread = new Thread(s);
             sThread.start();
             
             //Cliente para conseguir establece ligação ao bootstrapper
-            EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos);
+            EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos,numeroNos);
             Thread clientThread = new Thread(c);
             clientThread.start();
 

@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.List;
 
 public class ClientHandler implements Runnable{
-    private static final int MAXIMO_SALTOS = 8;
     final DataInputStream dataIn;
 	final DataOutputStream dataOut;
 	final Socket s;
@@ -15,6 +14,17 @@ public class ClientHandler implements Runnable{
     List<String> vizinhos;
     Rotas rotas;
     Fluxos fluxos;
+    Integer numeroNos;
+
+    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos, Rotas rotas, Fluxos fluxos, Integer numeroNos){
+        this.s = s;
+        this.dataIn = din;
+        this.dataOut = dout;
+        this.vizinhos = vizinhos;
+        this.rotas = rotas;
+        this.fluxos = fluxos;
+        this.numeroNos = numeroNos;
+    }
 
     private void printInfo(){
         System.out.print("\033[H\033[2J");
@@ -23,15 +33,6 @@ public class ClientHandler implements Runnable{
         System.out.println(this.rotas.toString());
         System.out.println("********TABELA DE FLUXOS********");
         System.out.println(this.fluxos.toString());
-    }
-
-    public ClientHandler(Socket s, DataInputStream din, DataOutputStream dout, List<String> vizinhos, Rotas rotas, Fluxos fluxos){
-        this.s = s;
-        this.dataIn = din;
-        this.dataOut = dout;
-        this.vizinhos = vizinhos;
-        this.rotas = rotas;
-        this.fluxos = fluxos;
     }
 
     private void reenviarMensagemMonitorizacao(String vizinho,String ipServidor,int distanciaServidor,long delayAcumulado){
@@ -124,7 +125,7 @@ public class ClientHandler implements Runnable{
                     Rota melhorRota = this.rotas.rotas.get(ipServidor.substring(1));
                     
                     //Enviar melhor rota para restantes vizinhos
-                    if(melhorRota.distancia < MAXIMO_SALTOS && mudouRotas){
+                    if(melhorRota.distancia < numeroNos && mudouRotas){
                         printInfo();
                         for(String vizinho : vizinhosRestantes){
                             reenviarMensagemMonitorizacao(vizinho, ipServidor, melhorRota.distancia, melhorRota.delay);

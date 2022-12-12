@@ -34,13 +34,6 @@ public class BootstrapperServer implements Runnable{
         overlay = ConfigFileParser.readFile(f);
         System.out.println("File loaded sucesfully!");
         
-        //Inicializar serviço de difusão
-        /*
-         StreamerDifusao sd = new StreamerDifusao();
-         Thread threadSD = new Thread(sd);
-         threadSD.start(overlay,connected_nodes);
-         */
-
         //Escutar todos os pedidos
         ServerSocket s = null;
         try{

@@ -11,10 +11,12 @@ import java.util.*;
 public class EntradaOverlay implements Runnable{ 
     String ipAddress; //Bootstrapper IP
     List<String> vizinhos;
+    Integer numeroNos;
     
-    public EntradaOverlay(String ipAddress, List<String> vizinhos){
+    public EntradaOverlay(String ipAddress, List<String> vizinhos, Integer numeroNos){
         this.ipAddress = ipAddress;
         this.vizinhos = vizinhos;
+        this.numeroNos = numeroNos;
     }
 
     @Override
@@ -25,11 +27,17 @@ public class EntradaOverlay implements Runnable{
             DataInputStream dataIn = new DataInputStream(s.getInputStream());
             DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
 
-            //Pedido de Vizinhos
+            //Pedido de Entrada na Rede
             dataOut.writeUTF("OVERLAY_JOIN_REQUEST");
+
+            //Receber número total de nós
+            this.numeroNos = dataIn.readInt();
+            System.out.println("Existem " + this.numeroNos + " nós na rede overlay!");
 
             //Receber número de vizinhos
             int numeroVizinhos = dataIn.readInt();
+            
+
             //Receber lista de vizinhos
             for(int i = 0 ; i < numeroVizinhos ; i++){
                 String ipVizinho = dataIn.readUTF();

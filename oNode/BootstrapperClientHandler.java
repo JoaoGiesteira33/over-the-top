@@ -47,6 +47,9 @@ public class BootstrapperClientHandler implements Runnable{
                     System.out.println("Asking to join overlay: " + senderIP);
                     List<String> vizinhos = this.overlay.get(senderIP);
 
+                    //Enviar número total de nós
+                    this.dataOut.writeInt(overlay.size());
+
                     //Enviar número de vizinhos
                     this.dataOut.writeInt(vizinhos.size());
 
