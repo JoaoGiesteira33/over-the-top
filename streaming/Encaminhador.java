@@ -154,7 +154,7 @@ public class Encaminhador {//implements Runnable{
                     try{
                       RTPsocket_out = new DatagramSocket();
                       RTPsocket_out.send(rcvdp);
-                      System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
+                      //System.out.println("Send frame #"+imagenb+" to "+rcvdp.getAddress() + "in Port "+rcvdp.getPort());
                     }
                     catch(IOException e){
                       System.out.println("Erro: " + e.getMessage());
