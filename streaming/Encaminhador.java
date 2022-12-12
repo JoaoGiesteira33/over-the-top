@@ -14,7 +14,7 @@ import oNode.Fluxos;
 
 public class Encaminhador {//implements Runnable{
 
-  Fluxos fluxos;
+  public Fluxos fluxos;
   List<InetAddress> ia_list;
     
   //GUI:
