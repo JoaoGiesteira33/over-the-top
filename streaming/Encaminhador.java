@@ -52,26 +52,29 @@ public class Encaminhador {//implements Runnable{
   //--------------------------
   //Constructor
   //--------------------------
-  public Encaminhador(List<InetAddress> ia_list){ //IMPLEMENTAR THREADS NISTO
+  public Encaminhador(List<String> ia_list){ //IMPLEMENTAR THREADS NISTO
 
     //init para a parte do cliente
     //--------------------------
+    this.ia_list=new ArrayList<>();
 
     cTimer = new Timer(20, new clientTimerListener());
     cTimer.setInitialDelay(1000);
     cTimer.setCoalesce(true);
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
     sBuf = new byte[15000];
-    this.ia_list=ia_list;
     try{
       // socket e video
       RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
       RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
+      for(String s: ia_list)
+          this.ia_list.add(InetAddress.getByName(s));
+
       while(true)
         cTimer.start();
 
-    }catch(SocketException se){
-      System.out.println("Erro ao receber: "+se.getMessage());
+    }catch(Exception e){
+      System.out.println("Erro: "+e.getMessage());
     }
     
   }
@@ -81,20 +84,11 @@ public class Encaminhador {//implements Runnable{
   //------------------------------------
   public static void main(String argv[]) 
   {  
-    List<InetAddress> ia_list= new ArrayList<>();
-    try{
-      for(String s: argv){
-        InetAddress ia = InetAddress.getByName(s);//("10.0.18.20");
-        ia_list.add(ia);
-        //Thread t = new Thread(e);
-        //t.start();
-      }
-      Encaminhador e = new Encaminhador(ia_list);
-        
-    }
-    catch(UnknownHostException e){
-      System.out.println("ERRO: "+e);
-    }
+    List<String> ia_list= new ArrayList<>();
+  
+    for(String s: argv)
+      ia_list.add(s);
+    Encaminhador e = new Encaminhador(ia_list);
   }
 
   //------------------------------------
