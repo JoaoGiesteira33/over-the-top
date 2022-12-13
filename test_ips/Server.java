@@ -18,7 +18,7 @@ public class Server {
             //read a message from the client
             String message = input.readUTF();
             //print the message
-            System.out.println("[RECEIVED]"+message);
+            System.out.println("[RECEIVED]"+message+"\n[FROM]:"+s.getInetAddress().toString());
             //close the socket
             s.close();
             //close the server socket
