@@ -163,12 +163,12 @@ public class Cliente {
 	        //create an RTPpacket object from the DP
 	        RTPpacket rtp_packet = new RTPpacket(rcvdp.getData(), rcvdp.getLength());
           
-           
-          if(imagenb>=500)
+          /* 
+          if(imagenb==500)
             imagenb=0;
-          
-          if(imagenb <   rtp_packet.getsequencenumber()){
-            imagenb++;
+          */
+          //if(imagenb <   rtp_packet.getsequencenumber()){
+          //  imagenb++;
 	          //print important header fields of the RTP packet received: 
 	          //System.out.println("Got RTP packet with SeqNum # "+rtp_packet.getsequencenumber()+" TimeStamp "+rtp_packet.gettimestamp()+" ms, of type "+rtp_packet.getpayloadtype());
 
@@ -187,7 +187,7 @@ public class Cliente {
 	          //display the image as an ImageIcon object
 	          icon = new ImageIcon(image);
 	          iconLabel.setIcon(icon);
-          }
+          //}
       }
       catch (InterruptedIOException iioe){
 	        System.out.println("Nothing to read");
