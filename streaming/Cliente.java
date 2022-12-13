@@ -190,7 +190,7 @@ public class Cliente {
           //}
       }
       catch (InterruptedIOException iioe){
-	        System.out.println("Nothing to read");
+	        //System.out.println("Nothing to read");
       }
       catch (Exception ioe) {
 	        System.out.println("Exception caught: "+ioe);
