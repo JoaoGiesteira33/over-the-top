@@ -41,7 +41,7 @@ public class Encaminhador {//implements Runnable{
   int imagenb = 0; //image nb of the image currently transmitted
   VideoStream video; //VideoStream object used to access video frames
   static int MJPEG_TYPE = 26; //RTP payload type for MJPEG video
-  static int FRAME_PERIOD = 100; //Frame period of the video to stream, in ms
+  static int FRAME_PERIOD = 40; //Frame period of the video to stream, in ms
   static int VIDEO_LENGTH = 500; //length of the video in frames
 
   Timer sTimer; //timer used to send the images at the video frame rate
@@ -69,7 +69,7 @@ public class Encaminhador {//implements Runnable{
     try{
       // socket e video
       RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-      RTPsocket_in.setSoTimeout(100); // setimeout to 10s
+      RTPsocket_in.setSoTimeout(1); // setimeout to 10s
       /*for(Fluxo f : fluxos.fluxos){
         for(String s: f.destinos)
         this.ia_list.add(InetAddress.getByName(s));
@@ -90,7 +90,7 @@ public class Encaminhador {//implements Runnable{
     //--------------------------
     this.ia_list=new ArrayList<>();
 
-    cTimer = new Timer(20, new clientTimerListener());
+    cTimer = new Timer(40, new clientTimerListener());
     cTimer.setInitialDelay(1000);
     cTimer.setCoalesce(true);
     cBuf = new byte[15000]; //allocate enough memory for the buffer used to receive data from the server
@@ -98,7 +98,7 @@ public class Encaminhador {//implements Runnable{
     try{
       // socket e video
       RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-      RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
+      RTPsocket_in.setSoTimeout(1); // setimeout to 10s
       for(String s: ia_list)
           this.ia_list.add(InetAddress.getByName(s));
 
