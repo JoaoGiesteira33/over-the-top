@@ -63,7 +63,7 @@ public class oNode{
 
             //Cliente
             Cliente cliente = new Cliente();
-            
+
             //Servidor
             Servidor servidor = new Servidor(fluxos);
             servidor.pack();
