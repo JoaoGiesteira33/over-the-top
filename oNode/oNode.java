@@ -61,6 +61,36 @@ public class oNode{
             Thread smrThread = new Thread(smr);
             smrThread.start();
 
+            //Cliente
+            Cliente cliente = new Cliente();
+            
+            //Servidor
+            Servidor servidor = new Servidor(fluxos);
+            servidor.pack();
+            servidor.setVisible(true);
+        }else if(args.length == 2 && (args[0].equals("-cs") || args[0].equals("-sc"))){
+            String bootstrapper = args[1];
+
+            //Server default para conseguir receber qualquer mensagem necessária
+            Server s = new Server(vizinhos,rotas,fluxos,numeroNos);
+            Thread sThread = new Thread(s);
+            sThread.start();
+
+            //Cliente para conseguir establece ligação ao bootstrapper
+            EntradaOverlay c = new EntradaOverlay(bootstrapper,vizinhos,numeroNos);
+            Thread clienThread = new Thread(c);
+            clienThread.start();
+
+            //Cliente para difusão de fluxo
+            DifusaoFluxo df = new DifusaoFluxo(rotas);
+            Thread dfThread = new Thread(df);
+            dfThread.start();
+
+            //Monitorização da Rede
+            StreamerMonitorizacaoRede smr = new StreamerMonitorizacaoRede(vizinhos);
+            Thread smrThread = new Thread(smr);
+            smrThread.start();
+
             //Servidor
             Servidor servidor = new Servidor(fluxos);
             servidor.pack();
