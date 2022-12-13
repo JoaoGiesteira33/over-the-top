@@ -36,7 +36,6 @@ public class Rotas {
             Rota atual = this.rotas.get(server);
             int dif_saltos = atual.distancia - r.distancia;
 
-
             //Verificar se rota é igual, o que significa que a velocidade da ligação mudou   
             if(atual.distancia == r.distancia && atual.nodoAnterior.equals(r.nodoAnterior)){
 
