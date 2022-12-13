@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class Rotas {
+    private final int tempo_por_salto_ms = 10;
     Map<String,Rota> rotas;
 
     public Rotas(){
@@ -33,16 +34,22 @@ public class Rotas {
         }else{
             //Obter rota atual para o servidor dado
             Rota atual = this.rotas.get(server);
+            int dif_saltos = atual.distancia - r.distancia;
+
 
             //Verificar se rota é igual, o que significa que a velocidade da ligação mudou   
             if(atual.distancia == r.distancia && atual.nodoAnterior.equals(r.nodoAnterior)){
+
                 //Mesmo que esta rota seja mais lenta temos de trocar
                 this.rotas.put(server,r);
                 return true;
-            }else if(r.delay < atual.delay){
+
+            }else if(r.delay < (atual.delay + (tempo_por_salto_ms * dif_saltos))){
+
                 //Se for uma rota nova apenas a colocamos se for mais rápida
                 this.rotas.put(server, r);
                 return true;
+
             }
         }
 
