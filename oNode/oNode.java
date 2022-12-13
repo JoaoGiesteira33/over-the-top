@@ -61,9 +61,6 @@ public class oNode{
             Thread smrThread = new Thread(smr);
             smrThread.start();
 
-            //Cliente
-            Cliente cliente = new Cliente();
-
             //Servidor
             Servidor servidor = new Servidor(fluxos);
             servidor.pack();
@@ -90,6 +87,9 @@ public class oNode{
             StreamerMonitorizacaoRede smr = new StreamerMonitorizacaoRede(vizinhos);
             Thread smrThread = new Thread(smr);
             smrThread.start();
+
+            //Cliente
+            Cliente cliente = new Cliente();
 
             //Servidor
             Servidor servidor = new Servidor(fluxos);
