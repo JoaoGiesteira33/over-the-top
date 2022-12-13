@@ -69,7 +69,7 @@ public class Encaminhador {//implements Runnable{
     try{
       // socket e video
       RTPsocket_in = new DatagramSocket(RTP_RCV_PORT); //init RTP socket (o mesmo para o cliente e servidor)
-      RTPsocket_in.setSoTimeout(4000); // setimeout to 10s
+      RTPsocket_in.setSoTimeout(100); // setimeout to 10s
       /*for(Fluxo f : fluxos.fluxos){
         for(String s: f.destinos)
         this.ia_list.add(InetAddress.getByName(s));
