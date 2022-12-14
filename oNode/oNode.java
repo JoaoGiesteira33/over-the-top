@@ -113,8 +113,9 @@ public class oNode{
         }else{
             System.out.println("Normal Node: oNode.java <bootstrapper_ip>");
             System.out.println("Bootstrapper Node: oNode.java -b <config_file>");
-            System.out.println("Cliente: oNode.java -c <bootstrapper_ip>");
+            System.out.println("Cliente Node: oNode.java -c <bootstrapper_ip>");
             System.out.println("Servidor Node: oNode.java -s <bootstrapper_ip>");
+            System.out.println("Cliente e Servidor Node: oNode.java -cs <bootstrapper_ip>");
             return;
         }
     }
